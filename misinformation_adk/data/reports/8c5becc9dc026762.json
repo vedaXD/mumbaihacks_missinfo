@@ -1,0 +1,70 @@
+{
+  "user_input": "did modi say that tonight 100rs would be banned",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T05:05:48.234458",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解读： …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (20 posts in r/StephenHiltonSnark, HFY, BestofRedditorUpdates): MIXED",
+      "verdict": "FALSE",
+      "confidence": 0.8,
+      "explanation": "The search results are largely irrelevant to the claim that Modi announced the banning of 100 rupee notes. The results discuss a police officer's assets, a commemorative coin, and the DID model (Difference in Differences) in econometrics. The absence of any credible news reports or official announcements about banning currency, especially from major news outlets, strongly suggests the claim is false. This type of claim aligns with a common misinformation pattern of falsely reporting currency bans. A real event of this magnitude would have extensive coverage.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/StephenHiltonSnark, HFY, BestofRedditorUpdates): MIXED",
+      "misinformation_pattern": "Frequent Fraud",
+      "pattern_confidence": 0.9,
+      "context_card": {
+        "verdict_explanation": "This claim has been identified as FALSE",
+        "confidence_level": "72% confidence",
+        "reasoning": "Based on analysis of 15 web sources (1 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "❌",
+        "color": "red",
+        "why_this_verdict": "Evidence from 1 credible sources contradicts this claim. This information is misleading or incorrect."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is about a hypothetical future event (banning of currency). As of November 29, 2025, there is no evidence to support this claim.",
+      "key_evidence": [
+        "Absence of credible news reports about the banning of 100 rupee notes as of November 29, 2025.",
+        "Irrelevant search results."
+      ],
+      "sources": [
+        "Times of India (November 2025)",
+        "Various academic and informational websites (2024-2025)"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Frequent Fraud (90% confidence)",
+        "⚠️ Search results were not relevant to the claim"
+      ],
+      "web_sources_found": 15,
+      "credible_sources_found": 1
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 0.8,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "8c5becc9dc026762",
+  "generated_at": "2025-11-29T05:06:08.673555"
+}
