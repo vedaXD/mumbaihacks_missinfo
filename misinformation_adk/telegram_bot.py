@@ -15,6 +15,8 @@ from telegram.constants import ParseMode
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from orchestrator_agent.orchestrator_tool import OrchestratorTool
+import re
+from typing import Optional
 
 # Load environment variables
 load_dotenv()
@@ -32,6 +34,32 @@ UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def extract_youtube_transcript(url: str) -> Optional[str]:
+    """Extract transcript from YouTube video"""
+    try:
+        from youtube_transcript_api import YouTubeTranscriptApi
+        
+        # Extract video ID
+        video_id = None
+        if "youtube.com/watch?v=" in url:
+            video_id = url.split("watch?v=")[1].split("&")[0]
+        elif "youtu.be/" in url:
+            video_id = url.split("youtu.be/")[1].split("?")[0]
+        
+        if not video_id:
+            return None
+        
+        # Get transcript
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript = " ".join([t['text'] for t in transcript_list])
+        
+        return transcript
+        
+    except Exception as e:
+        print(f"[YouTube] Transcript extraction failed: {e}")
+        return None
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send welcome message when /start is issued."""
     welcome_text = """
@@ -41,8 +69,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 I can analyze ANY content for misinformation:
 
-📝 **Text Messages**
+📝 **Text & YouTube URLs**
    • Fact-check claims with 30+ web sources
+   • Extract & verify YouTube video transcripts
    • Google News + Reddit + Twitter consensus
    • Detect misinformation patterns
 
@@ -85,16 +114,47 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⚠️ Please send a longer claim (at least 10 characters) for fact-checking.")
         return
     
-    # Send thinking message with progress
-    thinking_msg = await update.message.reply_text(
-        "🔍 **Fact-Checking Your Claim...**\n\n"
-        "⏳ Step 1/3: Searching Google News...\n"
-        "⏳ Step 2/3: Checking 30+ web sources...\n"
-        "⏳ Step 3/3: Analyzing social media...",
-        parse_mode=ParseMode.MARKDOWN
-    )
+    # Check if it's a YouTube URL
+    is_youtube = "youtube.com" in text or "youtu.be" in text
+    
+    if is_youtube:
+        # Send thinking message for YouTube
+        thinking_msg = await update.message.reply_text(
+            "🎥 **Analyzing YouTube Video...**\n\n"
+            "⏳ Step 1/3: Extracting transcript...\n"
+            "⏳ Step 2/3: Checking 30+ sources...\n"
+            "⏳ Step 3/3: Verifying claims...",
+            parse_mode=ParseMode.MARKDOWN
+        )
+    else:
+        # Send thinking message for text
+        thinking_msg = await update.message.reply_text(
+            "🔍 **Fact-Checking Your Claim...**\n\n"
+            "⏳ Step 1/3: Searching Google News...\n"
+            "⏳ Step 2/3: Checking 30+ web sources...\n"
+            "⏳ Step 3/3: Analyzing social media...",
+            parse_mode=ParseMode.MARKDOWN
+        )
     
     try:
+        # Handle YouTube URLs
+        original_text = text
+        if is_youtube:
+            transcript = extract_youtube_transcript(text)
+            if transcript:
+                text = f"YouTube Video Transcript:\n{transcript}"
+            else:
+                await thinking_msg.edit_text(
+                    "❌ **Could not extract YouTube transcript**\n\n"
+                    "This might happen if:\n"
+                    "• Video has no captions/subtitles\n"
+                    "• Captions are disabled\n"
+                    "• Video is private/restricted\n\n"
+                    "Try sending the video title or description instead.",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+                return
+        
         # Run orchestrator (same as API server)
         result = orchestrator.run(
             user_input=text,
@@ -112,7 +172,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             **result,
             'report_id': report_id,
             'generated_at': datetime.now().isoformat(),
-            'original_content': text
+            'original_content': text,
+            'youtube_url': original_text if is_youtube else None
         }
         
         # Save to reports directory

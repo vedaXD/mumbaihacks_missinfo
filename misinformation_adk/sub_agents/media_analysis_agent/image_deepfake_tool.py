@@ -1,34 +1,50 @@
 from google.adk.tools.base_tool import BaseTool
-from transformers import AutoProcessor, AutoModelForImageClassification
-import numpy as np
+import torch
+from torchvision import transforms
+from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
 from PIL import Image
 import io
 import base64
-import torch
+import os
 
 class ImageDeepfakeTool(BaseTool):
     def __init__(self):
         super().__init__(
             name="detect_image_deepfake",
-            description="Detects if an image is AI-generated or manipulated using pre-trained deepfake detection models."
+            description="Detects if an image is AI-generated or manipulated using custom-trained EfficientNet model."
         )
-        # Load pretrained deepfake detection model
-        # Using a working model from HuggingFace that auto-downloads
+        # Load custom trained EfficientNet model
         try:
-            # Try AI-generated image detector first (better for screenshots, AI art, etc.)
-            # Falls back to deepfake detector if needed
-            model_name = "umm-maybe/AI-image-detector"  # Detects AI-generated images (Stable Diffusion, DALL-E, etc.)
-            print(f"Loading AI-generated image detection model: {model_name}...")
-            self.processor = AutoProcessor.from_pretrained(model_name)
-            self.model = AutoModelForImageClassification.from_pretrained(model_name)
+            model_path = os.path.join(os.path.dirname(__file__), '..', '..', 'models', 'best_model-v3.pt')
+            print(f"Loading custom EfficientNet deepfake detection model from: {model_path}...")
+            
+            # Initialize EfficientNet architecture
+            weights = EfficientNet_B0_Weights.IMAGENET1K_V1
+            self.model = efficientnet_b0(weights=weights)
+            in_features = self.model.classifier[1].in_features
+            self.model.classifier = torch.nn.Sequential(
+                torch.nn.Dropout(0.4),
+                torch.nn.Linear(in_features, 2)  # 2 classes: REAL (0) and FAKE (1)
+            )
+            
+            # Load trained weights
+            self.model.load_state_dict(torch.load(model_path, map_location="cpu"))
             self.model.eval()
-            print("✓ AI-generated image detection model loaded successfully")
-            print(f"   Class labels: {self.model.config.id2label}")
+            
+            # Define image preprocessing
+            self.transform = transforms.Compose([
+                transforms.Resize((224, 224)),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
+            
+            print("✓ Custom EfficientNet deepfake detection model loaded successfully")
+            print("   Classes: 0=REAL, 1=FAKE")
         except Exception as e:
-            print(f"⚠️ Warning: Could not load image deepfake model: {e}")
-            print("   Continuing with basic ELA-based detection...")
-            self.processor = None
+            print(f"⚠️ Warning: Could not load custom deepfake model: {e}")
+            print("   Continuing with fallback detection...")
             self.model = None
+            self.transform = None
     
     def run(self, image_path: str = None, image_data: str = None) -> dict:
         """
@@ -55,43 +71,60 @@ class ImageDeepfakeTool(BaseTool):
             if img.mode != 'RGB':
                 img = img.convert('RGB')
             
-            # Run detection
-            if self.model and self.processor:
+            # Initialize variables
+            real_prob = None
+            fake_prob = None
+            
+            # Run detection with custom EfficientNet model
+            if self.model and self.transform:
                 # Preprocess image
-                inputs = self.processor(images=img, return_tensors="pt")
+                input_tensor = self.transform(img).unsqueeze(0)
                 
                 # Get predictions
                 with torch.no_grad():
-                    outputs = self.model(**inputs)
-                    logits = outputs.logits
-                    probabilities = torch.nn.functional.softmax(logits, dim=-1)
+                    output = self.model(input_tensor)
+                    probabilities = torch.softmax(output, dim=1)[0]
+                    predicted_class = torch.argmax(probabilities).item()
                 
-                # Get prediction (class 0 = real, class 1 = fake for most deepfake models)
-                predicted_class = probabilities.argmax(-1).item()
-                confidence = float(probabilities[0][predicted_class])
+                # Extract probabilities
+                real_prob = float(probabilities[0])
+                fake_prob = float(probabilities[1])
                 
-                # DEBUG: Print all class probabilities
-                print(f"   [DEBUG] Model predictions:")
-                print(f"   - Class 0 (Artificial/AI): {float(probabilities[0][0]):.4f}")
-                print(f"   - Class 1 (Human/Real): {float(probabilities[0][1]):.4f}")
-                print(f"   - Predicted class: {predicted_class}")
-                print(f"   - Confidence: {confidence:.4f}")
+                # Determine result (class 0 = REAL, class 1 = FAKE)
+                is_deepfake = predicted_class == 1
+                confidence = fake_prob if is_deepfake else real_prob
                 
-                # Check if AI-generated/deepfake
-                # For umm-maybe/AI-image-detector: Class 0 = artificial, Class 1 = human
-                is_deepfake = predicted_class == 0  # Class 0 means AI-generated/artificial
+                # Print results
+                print(f"   [DEEPFAKE DETECTION]")
+                print(f"   - Real probability: {real_prob:.3f}")
+                print(f"   - Fake probability: {fake_prob:.3f}")
+                print(f"   - Prediction: {'FAKE' if is_deepfake else 'REAL'}")
+                print(f"   - Confidence: {confidence:.3f}")
+                
+                # Generate explanation
+                if is_deepfake:
+                    explanation = f"Image detected as AI-GENERATED/FAKE with {confidence:.1%} confidence. The model identified artificial patterns consistent with deepfake or synthetic image generation."
+                else:
+                    explanation = f"Image appears AUTHENTIC/REAL with {confidence:.1%} confidence. No significant manipulation detected."
                 
             else:
-                # Fallback: Use basic ELA when model not loaded
-                print("   Using basic image analysis (model not loaded)...")
-                confidence = 0.3  # Low confidence placeholder
+                # Fallback: Model not loaded
+                print("   Using fallback detection (model not loaded)...")
+                confidence = 0.5
                 is_deepfake = False
+                explanation = "Deepfake model not loaded. Unable to perform detailed analysis."
             
             return {
-                "is_deepfake": is_deepfake,
+                "is_manipulated": is_deepfake,
+                "is_deepfake": is_deepfake,  # For backward compatibility
                 "confidence": confidence,
-                "authenticity_score": 1.0 - confidence,
-                "analysis": "Real image" if not is_deepfake else "Potential deepfake detected",
+                "authenticity_score": 1.0 - confidence if is_deepfake else confidence,
+                "explanation": explanation,
+                "technical_details": {
+                    "model": "EfficientNet-B0 (Custom Trained)",
+                    "real_probability": real_prob if self.model else None,
+                    "fake_probability": fake_prob if self.model else None
+                },
                 "model_loaded": self.model is not None
             }
             
