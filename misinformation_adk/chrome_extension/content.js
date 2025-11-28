@@ -17,6 +17,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({
             text: window.getSelection().toString()
         });
+    } else if (request.action === 'checkCurrentPage' || request.action === 'clearHighlights') {
+        // Forward to content-monitor.js if it's loaded
+        // This ensures highlighting works even if protection mode isn't active
+        sendResponse({ 
+            status: 'forwarded',
+            message: 'Please enable Elder Protection Mode for automatic highlighting, or the content monitor will handle this.'
+        });
     }
     
     return true;

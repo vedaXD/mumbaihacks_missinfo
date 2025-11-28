@@ -404,8 +404,8 @@
                 
                 <div class="toggle-container">
                     <div class="toggle-info">
-                        <h3>Enable Parent Protection Mode</h3>
-                        <p>Continuously monitor all webpages for misinformation and AI content</p>
+                        <h3>Enable Elder Protection Mode</h3>
+                        <p>Continuously monitor all webpages and automatically highlight suspicious claims</p>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="enableProtection">
@@ -416,12 +416,28 @@
                 <div class="toggle-container">
                     <div class="toggle-info">
                         <h3>Show Page Alerts</h3>
-                        <p>Display warnings directly on suspicious webpages</p>
+                        <p>Display warning popups for highly suspicious content</p>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="showPageAlerts" checked>
                         <span class="slider"></span>
                     </label>
+                </div>
+                
+                <div style="background: #fef3c7; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid #f59e0b;">
+                    <h3 style="color: #92400e; margin-bottom: 10px; font-size: 16px;">🎨 Auto-Highlighting Feature</h3>
+                    <p style="color: #78350f; font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                        When protection mode is active OR when you click "Check Page" button, suspicious claims are automatically highlighted:
+                    </p>
+                    <ul style="color: #78350f; font-size: 14px; margin-left: 20px; line-height: 1.8;">
+                        <li><strong style="color: #dc2626;">🔴 Red highlight:</strong> Likely false claim (>70% confidence)</li>
+                        <li><strong style="color: #f59e0b;">🟡 Yellow highlight:</strong> Questionable/suspicious (40-70%)</li>
+                        <li><strong style="color: #ea580c;">🟠 Orange highlight:</strong> Unverified claim</li>
+                        <li><strong style="color: #7c3aed;">🟣 Purple highlight:</strong> AI-generated content</li>
+                    </ul>
+                    <p style="color: #78350f; font-size: 13px; margin-top: 10px; font-style: italic;">
+                        💡 Click on any highlighted text to see detailed fact-check analysis!
+                    </p>
                 </div>
             </div>
 

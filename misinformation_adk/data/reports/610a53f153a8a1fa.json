@@ -1,0 +1,70 @@
+{
+  "user_input": "did modi say to leave usa",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:43:48.736163",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献 …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (20 posts in r/IndiaNewsUncensored, BestofRedditorUpdates, SubredditDrama): MIXED",
+      "verdict": "FALSE",
+      "confidence": 0.5599999999999999,
+      "explanation": "The search results are completely irrelevant to the claim. They primarily discuss \"DID\" which refers to \"Difference in Differences\" models in econometrics and \"Dissociative Identity Disorder.\" There is no mention of Modi making any statement about leaving the USA. The absence of credible sources for such a significant claim strongly suggests it is false. Real events generate immediate, verifiable coverage.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/IndiaNewsUncensored, BestofRedditorUpdates, SubredditDrama): MIXED\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "Political Manipulation",
+      "pattern_confidence": 0.7,
+      "context_card": {
+        "verdict_explanation": "This claim has been identified as FALSE",
+        "confidence_level": "56% confidence",
+        "reasoning": "Based on analysis of 10 web sources (0 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "❌",
+        "color": "red",
+        "why_this_verdict": "Evidence from 0 credible sources contradicts this claim. This information is misleading or incorrect."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is that Modi said to leave the USA. As of November 29, 2025, there is no evidence in the provided search results to support this claim. A statement of this nature would be a major international event and would have widespread coverage.",
+      "key_evidence": [
+        "There is no evidence in the provided search results that Modi said to leave the USA.",
+        "The search results are primarily about econometrics and mental health, not international relations or political statements."
+      ],
+      "sources": [
+        "None"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Political Manipulation (70% confidence)",
+        "⚠️ Search results were not relevant to the claim"
+      ],
+      "web_sources_found": 10,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 0.5599999999999999,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "610a53f153a8a1fa",
+  "generated_at": "2025-11-29T02:44:10.069153"
+}

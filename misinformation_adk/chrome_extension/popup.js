@@ -271,20 +271,36 @@ checkSelectionBtn.addEventListener('click', async () => {
     }
 });
 
-// Check current page content
+// Check current page content - now with automatic highlighting
 checkPageBtn.addEventListener('click', async () => {
     try {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         
+        showStatus('🔍 Scanning page for suspicious claims...', 'loading');
+        
+        // Send message to content-monitor.js to scan and highlight
+        const response = await chrome.tabs.sendMessage(tab.id, {
+            action: 'checkCurrentPage'
+        });
+        
+        if (response.status === 'completed') {
+            const highlightCount = response.highlightCount || 0;
+            if (highlightCount > 0) {
+                showStatus(`✅ Found and highlighted ${highlightCount} suspicious claim(s)!\n\nHighlight colors:\n🔴 Red = Likely false\n🟡 Yellow = Questionable\n🟠 Orange = Unverified\n\nClick on highlighted text for details.`, 'success');
+            } else {
+                showStatus('✅ Page scanned - No suspicious claims detected!', 'success');
+            }
+        } else if (response.status === 'error') {
+            showStatus('Error: ' + response.error, 'error');
+        }
+        
+        // Also do traditional full-page fact check
         const result = await chrome.scripting.executeScript({
             target: { tabId: tab.id },
             function: () => {
-                // Extract main text content from page
                 const article = document.querySelector('article');
                 const main = document.querySelector('main');
                 const content = article || main || document.body;
-                
-                // Get text, limit to first 5000 characters
                 const text = content.innerText.substring(0, 5000);
                 return {
                     text: text,
@@ -296,15 +312,16 @@ checkPageBtn.addEventListener('click', async () => {
         
         const pageData = result[0].result;
         
-        if (!pageData.text) {
-            showStatus('No content found on page', 'error');
-            return;
+        if (pageData.text) {
+            const content = `Page: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.text}`;
+            contentInput.value = content.substring(0, 500) + '...';
+            
+            // Run fact check in background
+            setTimeout(async () => {
+                await factCheck(content, 'text');
+            }, 500);
         }
         
-        const content = `Page: ${pageData.title}\nURL: ${pageData.url}\n\n${pageData.text}`;
-        contentInput.value = content.substring(0, 500) + '...';
-        
-        await factCheck(content, 'text');
     } catch (error) {
         showStatus('Error analyzing page: ' + error.message, 'error');
     }

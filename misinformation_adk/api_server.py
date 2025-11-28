@@ -660,155 +660,315 @@ def generate_html_report(report: dict) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fact-Check Report - {verdict}</title>
+    <title>विश्वास नेत्र - Fact-Check Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }}
+        
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #faf5f0 0%, #e8dfd6 100%);
             padding: 20px;
             min-height: 100vh;
+            position: relative;
         }}
+        
+        @keyframes fadeInUp {{
+            from {{ opacity: 0; transform: translateY(20px); }}
+            to {{ opacity: 1; transform: translateY(0); }}
+        }}
+        
+        @keyframes pulse {{
+            0%, 100% {{ transform: scale(1); }}
+            50% {{ transform: scale(1.05); }}
+        }}
+        
         .container {{
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(139, 92, 64, 0.15);
             overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
         }}
-        .header {{
-            background: {verdict_color};
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }}
-        .verdict-icon {{
-            font-size: 48px;
-            margin-bottom: 10px;
-        }}
-        .verdict-text {{
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }}
-        .confidence {{
-            font-size: 18px;
-            opacity: 0.9;
-        }}
-        .content {{
-            padding: 30px;
-        }}
-        .section {{
-            margin-bottom: 25px;
-        }}
-        .section-title {{
-            font-size: 18px;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 12px;
+        
+        .watermark {{
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            font-weight: 600;
+            color: #6b4423;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
         }}
+        
+        .watermark::before {{
+            content: '👁️';
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }}
+        
+        .brand-text {{
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }}
+        
+        .hindi-name {{
+            font-size: 14px;
+            color: #8b5c40;
+            opacity: 0.9;
+        }}
+        
+        .header {{
+            background: linear-gradient(135deg, {verdict_color} 0%, {verdict_color}dd 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .header::before {{
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }}
+        
+        @keyframes rotate {{
+            from {{ transform: rotate(0deg); }}
+            to {{ transform: rotate(360deg); }}
+        }}
+        
+        .verdict-icon {{
+            font-size: 64px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+            position: relative;
+            z-index: 1;
+        }}
+        
+        .verdict-text {{
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }}
+        
+        .confidence {{
+            font-size: 20px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+        }}
+        
+        .content {{
+            padding: 45px;
+            background: #fefdfb;
+        }}
+        
+        .section {{
+            margin-bottom: 35px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }}
+        
+        .section:nth-child(1) {{ animation-delay: 0.1s; }}
+        .section:nth-child(2) {{ animation-delay: 0.2s; }}
+        .section:nth-child(3) {{ animation-delay: 0.3s; }}
+        .section:nth-child(4) {{ animation-delay: 0.4s; }}
+        
+        .section-title {{
+            font-size: 20px;
+            font-weight: 700;
+            color: #6b4423;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }}
+        
         .explanation {{
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid {verdict_color};
-            line-height: 1.6;
-            color: #374151;
+            background: linear-gradient(135deg, #faf8f5 0%, #f5f2ed 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border-left: 5px solid {verdict_color};
+            line-height: 1.8;
+            color: #4a3826;
+            box-shadow: 0 4px 15px rgba(139, 92, 64, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }}
+        
+        .explanation:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(139, 92, 64, 0.12);
+        }}
+        
         .evidence-list, .sources-list {{
             list-style: none;
         }}
+        
         .evidence-list li, .sources-list li {{
-            padding: 12px;
-            background: #f3f4f6;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            border-left: 3px solid #6366f1;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #fff 0%, #faf8f5 100%);
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border-left: 4px solid #d4a574;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+            color: #4a3826;
+            line-height: 1.6;
         }}
+        
+        .evidence-list li:hover, .sources-list li:hover {{
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(139, 92, 64, 0.12);
+        }}
+        
         .warning {{
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }}
-        .social-media {{
-            background: #dbeafe;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-        }}
-        .meta {{
-            background: #f9fafb;
+            background: linear-gradient(135deg, #fff4e6 0%, #ffe8cc 100%);
+            border-left: 5px solid #f59e0b;
             padding: 20px;
-            border-top: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+            animation: pulse 2s infinite;
+        }}
+        
+        .social-media {{
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e9ff 100%);
+            border-left: 5px solid #6366f1;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+            color: #3730a3;
+        }}
+        
+        .meta {{
+            background: linear-gradient(135deg, #faf8f5 0%, #f0ede8 100%);
+            padding: 30px;
+            border-top: 3px solid #d4a574;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 25px;
         }}
+        
         .meta-item {{
             display: flex;
             flex-direction: column;
+            gap: 6px;
         }}
+        
         .meta-label {{
             font-size: 12px;
-            color: #6b7280;
+            color: #8b5c40;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }}
-        .meta-value {{
-            font-size: 14px;
+            letter-spacing: 1px;
             font-weight: 600;
-            color: #1f2937;
         }}
+        
+        .meta-value {{
+            font-size: 16px;
+            font-weight: 700;
+            color: #6b4423;
+        }}
+        
         .share-button {{
             display: block;
             width: 100%;
-            padding: 15px;
-            background: #6366f1;
+            padding: 18px;
+            background: linear-gradient(135deg, #8b5c40 0%, #6b4423 100%);
             color: white;
             text-align: center;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(139, 92, 64, 0.3);
+            letter-spacing: 0.5px;
         }}
+        
         .share-button:hover {{
-            background: #4f46e5;
+            background: linear-gradient(135deg, #6b4423 0%, #5a3820 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 64, 0.4);
         }}
+        
+        .share-button:active {{
+            transform: translateY(0);
+        }}
+        
         .badge {{
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }}
+        
         .badge-current {{ background: #d1fae5; color: #065f46; }}
         .badge-outdated {{ background: #fee2e2; color: #991b1b; }}
-        .badge-timeless {{ background: #dbeafe; color: #1e40af; }}
+        .badge-timeless {{ background: #e0e9ff; color: #3730a3; }}
+        
         .footer {{
-            padding: 20px;
+            padding: 30px;
             text-align: center;
-            background: #f9fafb;
-            color: #6b7280;
+            background: linear-gradient(135deg, #faf8f5 0%, #f0ede8 100%);
+            color: #8b5c40;
             font-size: 14px;
+            border-top: 2px solid #e8dfd6;
+        }}
+        
+        .footer-brand {{
+            font-size: 18px;
+            font-weight: 700;
+            color: #6b4423;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }}
+        
+        .footer-tagline {{
+            font-size: 13px;
+            color: #a67c52;
+            margin-top: 5px;
         }}
     </style>
 </head>
 <body>
+    <div class="watermark">
+        <span class="brand-text">Vishwas Netra</span>
+        <span class="hindi-name">विश्वास नेत्र</span>
+    </div>
+    
     <div class="container">
         <div class="header">
             <div class="verdict-icon">{verdict_icon}</div>
@@ -894,7 +1054,12 @@ def generate_html_report(report: dict) -> str:
         
         <div class="footer">
             <button class="share-button" onclick="copyLink()">📋 Copy Share Link</button>
-            <p style="margin-top: 15px;">Powered by Misinformation Detection AI</p>
+            <div class="footer-brand" style="margin-top: 20px;">
+                <span>👁️</span>
+                <span>Vishwas Netra</span>
+                <span style="color: #a67c52;">विश्वास नेत्र</span>
+            </div>
+            <p class="footer-tagline">Empowering Truth, Exposing Falsehood</p>
         </div>
     </div>
     

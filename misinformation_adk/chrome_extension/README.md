@@ -7,10 +7,19 @@ AI-powered fact-checking extension for Chrome that analyzes text, images, videos
 ## 🚀 Features
 
 - **📝 Text Fact-Checking**: Analyze selected text or entire pages
+- **🎨 Auto-Highlighting**: Automatically highlights suspicious claims on webpages
+  - 🔴 **Red** = Likely false (>70% confidence)
+  - 🟡 **Yellow** = Questionable/suspicious (40-70%)
+  - 🟠 **Orange** = Unverified claim
+  - 🟣 **Purple** = AI-generated content
+  - Click highlighted text for detailed analysis!
+- **🛡️ Elder Protection Mode**: Continuous monitoring with automatic highlighting
 - **🎬 YouTube Integration**: Automatically transcribe and fact-check videos
 - **🖼️ Image Analysis**: Detect deepfakes in images
+- **🎥 Video Deepfake Detection**: Analyze video authenticity
+- **🎵 Audio Deepfake Detection**: Detect voice cloning
 - **⌨️ Keyboard Shortcuts**:
-  - `Ctrl+Shift+F` - Fact-check current page
+  - `Ctrl+Shift+F` - Fact-check & highlight current page
   - `Ctrl+Shift+C` - Fact-check selected text
 - **🔗 Shareable Reports**: Get a unique link for every fact-check
 - **⚡ Fast Mode**: Skips content type detection for instant results
@@ -41,15 +50,25 @@ AI-powered fact-checking extension for Chrome that analyzes text, images, videos
 3. Click appropriate button:
    - **Check Text** - Analyze typed/pasted content
    - **Check Selection** - Analyze selected text on page
-   - **Check Page** - Analyze entire webpage
+   - **Check Page** - **Scans & highlights ALL suspicious claims on page!** 🎨
    - **Check Video** - Analyze YouTube video transcript
 
-### Method 2: Keyboard Shortcuts
-- Select text on any webpage
-- Press `Ctrl+Shift+C` (Windows/Linux) or `Cmd+Shift+C` (Mac)
-- Notification shows result instantly
+### Method 2: Elder Protection Mode (Auto-Highlighting)
+1. Click extension icon → Click ⚙️ settings
+2. Enable "Elder Protection Mode"
+3. All webpages are automatically scanned
+4. Suspicious claims highlighted in real-time:
+   - **Red** = Likely false
+   - **Yellow** = Questionable
+   - **Orange** = Unverified
+5. **Click any highlight** to see detailed fact-check!
 
-### Method 3: Context Menu
+### Method 3: Keyboard Shortcuts
+- Press `Ctrl+Shift+F` - **Highlight all claims on current page**
+- Press `Ctrl+Shift+C` - Fact-check selected text
+- Results appear as page highlights + notification
+
+### Method 4: Context Menu
 - Right-click on selected text → "Fact-check [text]"
 - Right-click on image → "Fact-check this image"
 - Right-click on video → "Fact-check this video"
