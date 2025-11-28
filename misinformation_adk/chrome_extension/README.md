@@ -1,4 +1,6 @@
-# Misinformation Detector - Chrome Extension
+# Vishwas Netra - Chrome Extension
+
+**विश्वास का नेत्र** (The Eye of Trust)
 
 AI-powered fact-checking extension for Chrome that analyzes text, images, videos, and YouTube content.
 

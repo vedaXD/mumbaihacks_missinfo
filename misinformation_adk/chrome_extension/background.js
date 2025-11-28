@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(() => {
         contexts: ['video']
     });
     
-    console.log('Misinformation Detector: Context menus installed');
+    console.log('Vishwas Netra: Context menus installed');
 });
 
 // Handle context menu clicks
@@ -164,4 +164,4 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
     }
 });
 
-console.log('Misinformation Detector: Background service worker loaded');
+console.log('Vishwas Netra: Background service worker loaded');

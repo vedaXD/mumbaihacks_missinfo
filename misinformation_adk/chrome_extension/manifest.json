@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Misinformation Detector",
+  "name": "Vishwas Netra",
   "version": "2.0.0",
-  "description": "AI-powered fact-checking with 24/7 Parent Protection Mode",
+  "description": "विश्वास का नेत्र - AI-powered misinformation detection with 24/7 Parent Protection Mode",
   "permissions": [
     "activeTab",
     "storage",
