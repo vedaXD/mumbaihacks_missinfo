@@ -1,0 +1,64 @@
+{
+  "user_input": "did modi told to buy crypto today",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:40:13.014098",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解读： …",
+      "date": "2025-11-29",
+      "twitter_consensus": "UNAVAILABLE",
+      "social_media_perspective": "Twitter users (0 tweets): UNAVAILABLE",
+      "verdict": "FALSE",
+      "confidence": 1.0,
+      "temporal_status": "CURRENT",
+      "time_verification": "The claim is that Modi told people to buy crypto \"today,\" which is November 29, 2025. The search results do not contain any information about Modi making such a statement on this date or recently.",
+      "explanation": "The provided web search results do not contain any information about Narendra Modi advising people to buy cryptocurrency on November 29, 2025, or any time recently. The search results are primarily about \"DID\" (Difference in Differences) models in econometrics and related topics, as well as some unrelated queries about Shanghai language and multiple personality disorder. There is no evidence to support the claim.\\n\\n🐦 Social Media Perspective: Twitter users (0 tweets): UNAVAILABLE\n\n✓ High confidence based on multiple authoritative sources.",
+      "key_evidence": [
+        "There is no mention of Modi or cryptocurrency in any of the search results.",
+        "The search results focus on unrelated topics such as econometrics and psychology."
+      ],
+      "sources": [
+        "什么是双重差分模型（difference-in-differences model - 知乎",
+        "计量经济学中常见的「DID」是什么意思？其能解决什么问题？ - 经济学季刊",
+        "多重人格、DID系统在现实中真的极少吗？ - 知乎",
+        "DID, PSM 及 DID+PSM 有何差异？DID 要假定不可观测效应随时间 …",
+        "上海话 chill why did - 百度知道 - Jul 19, 2025",
+        "请问did是什么？它和精神分裂的区别在于？ - 知乎",
+        "DID多重人格障碍的大脑到底是什么样？ - 知乎 - Sep 9, 2024",
+        "请问什么叫双向固定效应的DID双重差分模型？ - 知乎",
+        "想做did但样本全部受到冲击怎么办? - 知乎",
+        "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎"
+      ],
+      "warnings": [],
+      "web_sources_found": 10
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 1.0,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "1ba9f634ba6093d4",
+  "generated_at": "2025-11-29T01:40:24.052578"
+}

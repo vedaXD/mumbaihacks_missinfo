@@ -1,0 +1,55 @@
+{
+  "user_input": "arunachal pradesh is chinesse",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:42:05.920442",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "javascript - How to input phone no in this 'xxx-xxx-xxxx' format in ...",
+      "url": "https://stackoverflow.com/questions/56629603/how-to-input-phone-no-in-this-xxx-xxx-xxxx-format-in-number-input-field",
+      "snippet": "Jun 17, 2019 · Learn how to format phone numbers in the 'xxx-xxx-xxxx' style using a number input field.",
+      "date": "2025-11-29",
+      "twitter_consensus": "UNAVAILABLE",
+      "social_media_perspective": "Twitter users (0 tweets): UNAVAILABLE",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.1,
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The provided web search results do not contain any information related to the claim that \"arunachal pradesh is chinesse\" as of November 29, 2025. The search results are irrelevant to the claim.",
+      "explanation": "The provided web search results are completely unrelated to the claim. They consist of technical questions and discussions about programming, string formatting, and internet memes. There is no information about Arunachal Pradesh or its relationship with China. Therefore, it is impossible to verify the claim based on the provided information.\\n\\n🐦 Social Media Perspective: Twitter users (0 tweets): UNAVAILABLE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "key_evidence": [
+        "No relevant evidence found in the provided search results."
+      ],
+      "sources": [
+        "All sources are irrelevant to the claim."
+      ],
+      "warnings": [],
+      "web_sources_found": 15,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.1,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "1cf45735d1017770",
+  "generated_at": "2025-11-29T01:42:10.811059"
+}

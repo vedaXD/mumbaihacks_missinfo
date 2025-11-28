@@ -1,0 +1,58 @@
+{
+  "user_input": "did modi say to buy crypto",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:34:59.816567",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "temporal_status": "UNCLEAR",
+      "sources_checked": [
+        "gemini_ai_with_web_grounding",
+        "web_search",
+        "twitter_consensus"
+      ],
+      "explanation": "There are no web search results provided to verify whether Modi said to buy crypto. Therefore, I cannot determine the truthfulness of the claim.\\n\\n🐦 Social Media Perspective: Twitter users (0 tweets): UNAVAILABLE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "stored_in_db": true,
+      "twitter_consensus": "UNAVAILABLE",
+      "social_media_perspective": "Twitter users (0 tweets): UNAVAILABLE",
+      "time_verification": "The current date is November 29, 2025. The claim is whether Modi said to buy crypto. Without any web search results, it's impossible to determine when this event may or may not have occurred.",
+      "key_evidence": [
+        "No evidence available.",
+        "No evidence available."
+      ],
+      "sources": [
+        "No sources available.",
+        "No sources available."
+      ],
+      "warnings": [],
+      "web_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.0,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "5e73fc9cb7567ce5",
+  "generated_at": "2025-11-29T01:35:10.087826"
+}
