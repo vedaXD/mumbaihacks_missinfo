@@ -31,29 +31,43 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send welcome message when /start is issued."""
     welcome_text = """
-🔍 **Welcome to Misinformation Detector Bot!**
+🛡️ **Welcome to Vishwas Netra Bot!**
 
-I'm like Grok on Twitter, but for Telegram. I can analyze:
+*विश्वास का नेत्र - Your Truth Guardian*
 
-📝 **Text** - Send me any claim to fact-check
-🖼️ **Images** - Check if AI-generated or deepfake
-🎥 **Videos** - Detect manipulated content
-🎵 **Audio** - Identify AI voice clones & transcribe
+I can analyze ANY content for misinformation:
 
-**How to use:**
-1. Send me text, image, video, or audio
-2. I'll analyze it using AI + web search + social media
-3. Get instant verdict with detailed report
+📝 **Text Messages**
+   • Fact-check claims with 30+ web sources
+   • Google News + Reddit + Twitter consensus
+   • Detect misinformation patterns
 
-**Features:**
-✅ Gemini AI fact-checking
-✅ Web search (15+ sources)
-✅ Twitter consensus
-✅ AI-generated media detection
-✅ OCR & transcription
-✅ Educational explanations
+🖼️ **Images**
+   • AI-generated image detection (deepfake)
+   • OCR text extraction & fact-checking
+   • Source verification
 
-Try sending me something to check! 🚀
+🎥 **Videos**
+   • Deepfake video detection
+   • Frame-by-frame analysis
+   • Content fact-checking
+
+🎵 **Audio & Voice Messages**
+   • AI voice clone detection
+   • Speech-to-text transcription
+   • Fact-check transcribed content
+
+**📊 What You Get:**
+✅ Verdict: TRUE/FALSE/MISLEADING
+✅ Confidence score (0-100%)
+✅ Detailed explanation
+✅ Source citations
+✅ Shareable HTML report
+
+**⚡ Quick Start:**
+Just send me something - I'll figure out what to do!
+
+*Powered by Gemini 2.0 + Advanced ML Models*
 """
     await update.message.reply_text(welcome_text, parse_mode=ParseMode.MARKDOWN)
 
@@ -62,8 +76,19 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle text messages for fact-checking."""
     text = update.message.text
     
-    # Send thinking message
-    thinking_msg = await update.message.reply_text("🔍 Analyzing your claim...\n⏳ This may take a few moments...")
+    # Ignore short messages
+    if len(text) < 10:
+        await update.message.reply_text("⚠️ Please send a longer claim (at least 10 characters) for fact-checking.")
+        return
+    
+    # Send thinking message with progress
+    thinking_msg = await update.message.reply_text(
+        "🔍 **Fact-Checking Your Claim...**\n\n"
+        "⏳ Step 1/3: Searching Google News...\n"
+        "⏳ Step 2/3: Checking 30+ web sources...\n"
+        "⏳ Step 3/3: Analyzing social media...",
+        parse_mode=ParseMode.MARKDOWN
+    )
     
     try:
         # Run orchestrator
@@ -93,13 +118,25 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing text: {str(e)}")
+        error_msg = f"❌ **Error Analyzing Text**\n\n"
+        error_msg += f"Details: {str(e)[:200]}\n\n"
+        error_msg += "💡 *Try:*\n"
+        error_msg += "• Simplifying your claim\n"
+        error_msg += "• Sending it again\n"
+        error_msg += "• Using /help for guidance"
+        await thinking_msg.edit_text(error_msg, parse_mode=ParseMode.MARKDOWN)
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle image messages for AI detection and OCR."""
-    # Send thinking message
-    thinking_msg = await update.message.reply_text("🖼️ Analyzing image...\n⏳ Running AI detection + OCR...")
+    # Send thinking message with progress
+    thinking_msg = await update.message.reply_text(
+        "🖼️ **Analyzing Image...**\n\n"
+        "⏳ Step 1/3: Detecting AI-generated content...\n"
+        "⏳ Step 2/3: Extracting text (OCR)...\n"
+        "⏳ Step 3/3: Fact-checking content...",
+        parse_mode=ParseMode.MARKDOWN
+    )
     
     try:
         # Get largest photo size
@@ -196,7 +233,11 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     audio_obj = update.message.voice if is_voice else update.message.audio
     
     thinking_msg = await update.message.reply_text(
-        "🎵 Analyzing audio...\n⏳ Running AI voice detection + transcription..."
+        "🎵 **Analyzing Audio...**\n\n"
+        "⏳ Step 1/3: Detecting AI voice cloning...\n"
+        "⏳ Step 2/3: Transcribing speech...\n"
+        "⏳ Step 3/3: Fact-checking content...",
+        parse_mode=ParseMode.MARKDOWN
     )
     
     try:
@@ -369,32 +410,62 @@ def format_audio_result(result: dict) -> str:
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send help message."""
     help_text = """
-🔍 **How to Use This Bot**
+🔍 **Vishwas Netra Bot - User Guide**
 
-**Send me:**
-📝 Text - Any claim you want fact-checked
-🖼️ Image - Check if AI-generated + extract text
-🎥 Video - Detect deepfakes and manipulation
-🎵 Audio/Voice - Detect AI voices + transcribe
+**📝 Text Fact-Checking**
+Send any claim:
+• "Modi banned 10 rupee notes"
+• "COVID vaccine contains microchips"
+• "Earth is flat"
 
-**What I check:**
-✅ AI-generated media detection
-✅ Gemini AI fact-checking
-✅ Web search across 15+ sources
-✅ Twitter/social media consensus
-✅ OCR text extraction
-✅ Audio transcription
-✅ Educational explanations
+I'll check 30+ sources and give you a verdict!
 
-**Commands:**
-/start - Show welcome message
-/help - Show this help message
+**🖼️ Image Analysis**
+Send any image:
+• Screenshots of viral posts
+• Forwarded images
+• Memes with text
 
-**Powered by:**
-🤖 Google Gemini AI
-🔍 Web Search
-🐦 Twitter API
-🎯 Custom ML models
+I'll detect AI-generation & extract text for fact-checking!
+
+**🎥 Video Analysis**
+Send videos up to 50MB:
+• Deepfake detection
+• Content verification
+• Frame analysis
+
+**🎵 Audio/Voice Analysis**
+Send audio or voice messages:
+• AI voice clone detection
+• Speech transcription
+• Fact-check spoken claims
+
+**📊 What You Get:**
+✅ Verdict (TRUE/FALSE/MISLEADING)
+✅ Confidence score
+✅ Detailed explanation
+✅ Multiple sources checked
+✅ Social media consensus
+✅ Shareable report link
+
+**⚡ Commands:**
+/start - Welcome message
+/help - This help message
+
+**🛠️ Tech Stack:**
+• Gemini 2.0 Flash Exp AI
+• Google News API
+• Reddit + Twitter analysis
+• Advanced ML models
+• 30+ web sources
+
+**💡 Tips:**
+• Longer claims = better analysis
+• Clear images work best
+• Audio quality matters
+• Wait for full analysis (10-30 sec)
+
+*Built with ❤️ for truth*
 """
     await update.message.reply_text(help_text, parse_mode=ParseMode.MARKDOWN)
 
