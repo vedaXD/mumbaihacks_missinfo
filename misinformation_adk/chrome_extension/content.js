@@ -22,4 +22,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
 });
 
-console.log('Misinformation Detector: Content script loaded');
+console.log('Vishwas Netra: Content script loaded');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Misinformation Detector</title>
+    <title>Vishwas Netra</title>
     <style>
         * {
             margin: 0;
@@ -23,6 +23,20 @@
             text-align: center;
             border-bottom: 3px solid #667eea;
             position: relative;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
         }
         
         .settings-icon {
@@ -418,8 +432,11 @@
 <body>
     <div class="header">
         <div class="settings-icon" id="settingsBtn" title="Parent Protection Settings">⚙️</div>
-        <h1>🔍 Misinformation Detector</h1>
-        <p>AI-powered fact-checking with deepfake detection</p>
+        <div class="logo-container">
+            <img src="icons/icon48.png" alt="Vishwas Netra Logo" class="logo">
+            <h1 style="margin: 0;">Vishwas Netra</h1>
+        </div>
+        <p>विश्वास का नेत्र - Your Truth Guardian</p>
         <div class="protection-status" id="protectionStatus">
             <span class="status-dot"></span>
             <span id="statusText">Protection Inactive</span>

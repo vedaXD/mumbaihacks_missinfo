@@ -1,4 +1,4 @@
-// Popup script for Misinformation Detector extension
+// Popup script for Vishwas Netra extension
 
 const API_BASE = 'http://localhost:8000';
 
