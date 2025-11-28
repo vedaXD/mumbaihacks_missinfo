@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Environment
+.env
+
+# Test files
+test_*.png
+test_*.jpg
+test_*.mp4
+
+# Documentation (keep README.md only)
+IMPLEMENTATION_SUMMARY.md
+QUICK_START*.md
+SETUP.md
+
+# Service account (keep example)
+service-account-key.json
