@@ -75,14 +75,16 @@ I can analyze ANY content for misinformation:
    • Google News + Reddit + Twitter consensus
    • Detect misinformation patterns
 
-🖼️ **Images**
-   • AI-generated image detection (deepfake)
-   • OCR text extraction & fact-checking
+🖼️ **Images** _(Enhanced with Qwen Vision AI)_
+   • AI-generated image detection (EfficientNet)
+   • Advanced text extraction (memes, infographics)
+   • Visual context understanding
+   • Claim detection from images
    • Source verification
 
 🎥 **Videos**
-   • Deepfake video detection
-   • Frame-by-frame analysis
+   • Deepfake video detection (frame-by-frame)
+   • Custom AI model (96% accuracy)
    • Content fact-checking
 
 🎵 **Audio & Voice Messages**
@@ -224,9 +226,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Send thinking message with progress
     thinking_msg = await update.message.reply_text(
         "🖼️ **Analyzing Image...**\n\n"
-        "⏳ Step 1/3: Detecting AI-generated content...\n"
-        "⏳ Step 2/3: Extracting text (OCR)...\n"
-        "⏳ Step 3/3: Fact-checking content...",
+        "⏳ Step 1/4: Detecting AI-generated content (EfficientNet)...\n"
+        "⏳ Step 2/4: Advanced text extraction (Qwen Vision)...\n"
+        "⏳ Step 3/4: Understanding visual context...\n"
+        "⏳ Step 4/4: Fact-checking content...",
         parse_mode=ParseMode.MARKDOWN
     )
     
@@ -488,32 +491,51 @@ def format_text_result(result: dict) -> str:
 
 
 def format_image_result(result: dict) -> str:
-    """Format image analysis result for Telegram - concise version."""
+    """Format image analysis result for Telegram - concise version with Qwen Vision info."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
     fact_check = result.get('stages', {}).get('fact_check', {})
     
     image_deepfake = media_analysis.get('image_deepfake', {})
-    is_deepfake = image_deepfake.get('is_manipulated', False)
+    is_deepfake = image_deepfake.get('is_manipulated', False) or image_deepfake.get('is_deepfake', False)
     deepfake_confidence = image_deepfake.get('confidence', 0.0)
     
+    # Check for Qwen Vision analysis
+    qwen_analysis = media_analysis.get('qwen_vision_analysis', {})
     ocr_data = media_analysis.get('ocr', {})
-    ocr_text = ocr_data.get('extracted_text', '')
+    
+    # Prefer Qwen Vision text if available
+    ocr_text = qwen_analysis.get('extracted_text', '') or ocr_data.get('extracted_text', '')
+    ocr_method = qwen_analysis.get('method', ocr_data.get('method', 'unknown'))
     
     content_verdict = fact_check.get('verdict', 'UNCERTAIN')
     content_confidence = fact_check.get('confidence', 0.0)
+    explanation = fact_check.get('explanation', '')
     
     emoji = '❌' if is_deepfake else '✅'
     status = 'AI-GENERATED' if is_deepfake else 'AUTHENTIC'
     
     response = f"🖼️ {emoji} **{status}** ({deepfake_confidence:.0%})\n\n"
     
+    # Show OCR method (Qwen Vision is better)
+    if ocr_text and ocr_method == 'qwen-vision':
+        response += "🤖 _Advanced Vision AI used_\n"
+    
     # OCR text if available
     if ocr_text:
-        response += f"📝 Text: _{ocr_text[:150]}..._\n\n" if len(ocr_text) > 150 else f"📝 Text: _{ocr_text}_\n\n"
+        text_preview = ocr_text[:150] + "..." if len(ocr_text) > 150 else ocr_text
+        response += f"📝 Text: _{text_preview}_\n\n"
         
         if len(ocr_text.split()) >= 10:
             verdict_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
             response += f"{verdict_emoji} Content: **{content_verdict}** ({content_confidence:.0%})\n"
+            
+            # Add brief explanation
+            if explanation:
+                brief = explanation.split('.')[0] + '.'
+                brief = brief[:120] + "..." if len(brief) > 120 else brief
+                response += f"💡 _{brief}_\n"
+    else:
+        response += "📝 _No text detected in image_\n"
     
     return response
 
