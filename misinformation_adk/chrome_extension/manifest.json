@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+  "name": "Misinformation Detector",
+  "version": "2.0.0",
+  "description": "AI-powered fact-checking with 24/7 Parent Protection Mode",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "scripting",
+    "notifications",
+    "alarms"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background-monitor.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "content-monitor.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "check-page": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Fact-check current page"
+    },
+    "check-selection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Fact-check selected text"
+    }
+  },
+  "options_page": "settings.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["settings.html", "icon128.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

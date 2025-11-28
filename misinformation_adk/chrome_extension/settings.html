@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Protection Mode - Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-info h3 {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .toggle-info p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px 20px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .radio-option label:hover {
+            border-color: #667eea;
+        }
+
+        .radio-option .option-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .radio-option .option-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .trusted-domains {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .domain-list {
+            margin-bottom: 15px;
+        }
+
+        .domain-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .domain-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .domain-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .add-domain {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-domain input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .add-domain input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-domain button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .add-domain button:hover {
+            transform: scale(1.05);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .alert-history {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            padding: 15px;
+            background: #f9fafb;
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .alert-item.ai-content {
+            border-left-color: #f59e0b;
+        }
+
+        .alert-item.verified {
+            border-left-color: #10b981;
+        }
+
+        .alert-time {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .alert-url {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+
+        .alert-details {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f9fafb;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-indicator.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6b7280;
+        }
+
+        .status-indicator.active .status-dot {
+            background: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .save-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Parent Protection Mode</h1>
+            <p>24/7 monitoring to protect against misinformation and AI-generated content</p>
+        </div>
+
+        <div class="content">
+            <!-- Status Section -->
+            <div class="section">
+                <h2>📊 Current Status</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <span id="statusIndicator" class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span id="statusText">Inactive</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Main Toggle -->
+            <div class="section">
+                <h2>🔒 Protection Settings</h2>
+                
+                <div class="toggle-container">
+                    <div class="toggle-info">
+                        <h3>Enable Parent Protection Mode</h3>
+                        <p>Continuously monitor all webpages for misinformation and AI content</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="enableProtection">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="toggle-container">
+                    <div class="toggle-info">
+                        <h3>Show Page Alerts</h3>
+                        <p>Display warnings directly on suspicious webpages</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="showPageAlerts" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notification Level -->
+            <div class="section">
+                <h2>🔔 Alert Sensitivity</h2>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="levelLow" name="notificationLevel" value="low">
+                        <label for="levelLow">
+                            <div class="option-title">Low</div>
+                            <div class="option-desc">Only critical alerts</div>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="levelMedium" name="notificationLevel" value="medium">
+                        <label for="levelMedium">
+                            <div class="option-title">Medium</div>
+                            <div class="option-desc">Balanced protection</div>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="levelHigh" name="notificationLevel" value="high" checked>
+                        <label for="levelHigh">
+                            <div class="option-title">High</div>
+                            <div class="option-desc">Maximum protection</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trusted Domains -->
+            <div class="section">
+                <h2>✅ Trusted Websites</h2>
+                <div class="trusted-domains">
+                    <div id="domainList" class="domain-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div class="add-domain">
+                        <input type="text" id="newDomain" placeholder="example.com">
+                        <button id="addDomainBtn">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="section">
+                <h2>📈 Protection Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalScans">0</div>
+                        <div class="stat-label">Total Scans</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalAlerts">0</div>
+                        <div class="stat-label">Alerts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="aiDetected">0</div>
+                        <div class="stat-label">AI Content</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="suspiciousContent">0</div>
+                        <div class="stat-label">Suspicious</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert History -->
+            <div class="section">
+                <h2>📜 Recent Alerts</h2>
+                <div id="alertHistory" class="alert-history">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="saveNotification" class="save-notification">
+        ✅ Settings saved successfully!
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
