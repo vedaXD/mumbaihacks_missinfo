@@ -105,7 +105,7 @@ KEY_EVIDENCE:
 SOURCES:
 - [source 1 with publication date - preferably recent]
 - [source 2 with publication date - preferably recent]
-TWITTER_CONSENSUS: [What verified accounts/experts are saying NOW in November 2025]
+SOCIAL_MEDIA_CONSENSUS: [What Reddit communities and Twitter users are saying NOW in November 2025]
 WARNINGS: [Any red flags like outdated info, missing context, etc.]
 """
             

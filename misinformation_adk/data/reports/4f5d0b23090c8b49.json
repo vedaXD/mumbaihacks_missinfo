@@ -1,0 +1,60 @@
+{
+  "user_input": "Is climate change real",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:59:33.430345",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "State of the Global Climate 2023 - World Meteorological Organization",
+      "url": "https://wmo.int/publication-series/state-of-global-climate-2023",
+      "snippet": "The State of the Global Climate 2023 report shows that records were once again broken, and in some cases smashed, for greenhouse gas …",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_TRUE",
+      "social_media_perspective": "Reddit (20 posts in r/BestofRedditorUpdates, complaints, DeepThoughts): LIKELY_TRUE",
+      "verdict": "TRUE",
+      "confidence": 1.0,
+      "temporal_status": "CURRENT",
+      "time_verification": "The provided web search results, dated between November 6, 2025, and November 21, 2025, confirm the reality of climate change. These are current as of November 29, 2025.",
+      "explanation": "The World Meteorological Organization (WMO) explicitly defines and reports on climate change. The \"State of the Global Climate\" reports for 2023 and 2024, along with the WMO's Global Annual to Decadal Climate Update (2025-2029), all point to ongoing changes in the global climate. The WMO is a credible source, and multiple reports from them confirm the claim. Reddit discussions also indicate a consensus that climate change is real.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/BestofRedditorUpdates, complaints, DeepThoughts): LIKELY_TRUE\n\n✓ High confidence based on multiple authoritative sources.",
+      "key_evidence": [
+        "The WMO defines climate change as changes in the state of the climate (November 6, 2025).",
+        "The State of the Global Climate 2023 report shows records were broken for greenhouse gas concentrations (Date not specified in search result, but likely published in 2024).",
+        "The WMO Global Annual to Decadal Climate Update (2025–2029) projects that global temperatures are expected to continue at or near record levels."
+      ],
+      "sources": [
+        "World Meteorological Organization - Climate - Nov 21, 2025",
+        "World Meteorological Organization - State of the Global Climate 2024",
+        "World Meteorological Organization - WMO Global Annual to Decadal Climate Update (2025-2029)",
+        "World Meteorological Organization - Climate change - Nov 6, 2025",
+        "World Meteorological Organization - State of the Global Climate 2023"
+      ],
+      "warnings": [],
+      "web_sources_found": 5
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "TRUE",
+  "confidence": 1.0,
+  "recommendations": [
+    "Content appears verified, but always maintain healthy skepticism",
+    "Share responsibly with proper context"
+  ],
+  "report_id": "4f5d0b23090c8b49",
+  "generated_at": "2025-11-29T01:59:50.121434"
+}

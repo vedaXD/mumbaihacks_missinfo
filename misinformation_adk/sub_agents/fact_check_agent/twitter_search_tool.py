@@ -8,9 +8,12 @@ class TwitterSearchTool(BaseTool):
             name="twitter_search",
             description="Searches Twitter/X for information about claims and analyzes social consensus."
         )
-        # TODO: Set your Twitter API credentials
-        # self.bearer_token = os.getenv('TWITTER_BEARER_TOKEN')
-        self.bearer_token = None
+        # Load Twitter API credentials from environment
+        self.bearer_token = os.getenv('TWITTER_BEARER_TOKEN')
+        if self.bearer_token:
+            print("[INFO] Twitter API configured successfully")
+        else:
+            print("[WARNING] TWITTER_BEARER_TOKEN not found in .env file")
     
     def run(self, query: str, max_results: int = 20) -> dict:
         """
@@ -25,11 +28,13 @@ class TwitterSearchTool(BaseTool):
         """
         try:
             if not self.bearer_token:
+                print("[WARNING] Twitter search skipped - no bearer token configured")
                 return {
-                    "error": "Twitter API not configured. Set TWITTER_BEARER_TOKEN environment variable.",
+                    "error": "Twitter API not configured. Add TWITTER_BEARER_TOKEN to .env file.",
                     "query": query,
                     "consensus": "UNAVAILABLE",
-                    "tweets_analyzed": 0
+                    "tweets_analyzed": 0,
+                    "message": "Twitter/X API requires authentication. Please configure TWITTER_BEARER_TOKEN in .env file."
                 }
             
             # Search recent tweets
@@ -41,7 +46,7 @@ class TwitterSearchTool(BaseTool):
                     "tweets_analyzed": 0,
                     "consensus": "NO_DATA",
                     "sentiment": "neutral",
-                    "message": "No tweets found for this query"
+                    "message": "No tweets found. This could be due to: (1) No matching tweets, (2) Rate limit exceeded (Free tier = 1 request only), or (3) API access level restrictions."
                 }
             
             # Analyze sentiment and consensus
@@ -75,29 +80,57 @@ class TwitterSearchTool(BaseTool):
             params = {
                 "query": query,
                 "max_results": min(max_results, 100),
-                "tweet.fields": "author_id,created_at,public_metrics,entities",
+                "tweet.fields": "author_id,created_at,public_metrics,entities,text",
                 "expansions": "author_id",
-                "user.fields": "verified,public_metrics"
+                "user.fields": "verified,public_metrics,username,name"
             }
             
-            response = requests.get(url, headers=headers, params=params)
+            print(f"[TWITTER] Searching for: '{query}' (max {max_results} results)")
+            response = requests.get(url, headers=headers, params=params, timeout=10)
             
-            if response.status_code != 200:
-                print(f"Twitter API error: {response.status_code}")
+            print(f"[TWITTER] Response status: {response.status_code}")
+            
+            if response.status_code == 401:
+                print(f"[TWITTER ERROR] Authentication failed - invalid bearer token")
+                print(f"[TWITTER] Response: {response.text[:200]}")
+                return []
+            elif response.status_code == 403:
+                print(f"[TWITTER ERROR] Access forbidden - check API access level")
+                print(f"[TWITTER] Response: {response.text[:200]}")
+                return []
+            elif response.status_code == 429:
+                reset_time = response.headers.get('x-rate-limit-reset', 'unknown')
+                print(f"[TWITTER ERROR] Rate limit exceeded. Will reset at: {reset_time}")
+                print(f"[TWITTER] Free tier only allows 1 request. Upgrade to Basic ($100/month) for higher limits.")
+                return []
+            elif response.status_code != 200:
+                print(f"[TWITTER ERROR] API error {response.status_code}: {response.text[:200]}")
                 return []
             
             data = response.json()
             tweets = data.get('data', [])
+            
+            if not tweets:
+                print(f"[TWITTER] No tweets found for query: '{query}'")
+                return []
+            
             users = {user['id']: user for user in data.get('includes', {}).get('users', [])}
             
             # Enrich tweets with user data
             for tweet in tweets:
                 tweet['user'] = users.get(tweet['author_id'], {})
             
+            print(f"[TWITTER] Successfully retrieved {len(tweets)} tweets")
             return tweets
             
+        except requests.exceptions.Timeout:
+            print(f"[TWITTER ERROR] Request timeout")
+            return []
+        except requests.exceptions.RequestException as e:
+            print(f"[TWITTER ERROR] Network error: {e}")
+            return []
         except Exception as e:
-            print(f"Twitter search error: {e}")
+            print(f"[TWITTER ERROR] Unexpected error: {type(e).__name__}: {e}")
             return []
     
     def _analyze_tweets(self, tweets: list) -> dict:

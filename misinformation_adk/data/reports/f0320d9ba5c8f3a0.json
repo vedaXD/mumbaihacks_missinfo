@@ -1,0 +1,57 @@
+{
+  "user_input": "Elon Musk Tesla",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:53:11.227789",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "如何看待马斯克在就职仪式上行了两次纳粹礼？ - 知乎",
+      "url": "https://www.zhihu.com/question/10149763158",
+      "snippet": "知乎，中文互联网高质量的问答社区和创作者聚集的原创内容平台，于 2011 年 1 月正式上线，以「让人们更好的分享知识、经验和见解，找到自己的解答」为品牌使命。知乎凭借认真、专业 …",
+      "date": "2025-11-29",
+      "twitter_consensus": "NO_DATA",
+      "social_media_perspective": "Twitter users (0 tweets): NO_DATA",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.5,
+      "temporal_status": "TIMELESS",
+      "time_verification": "The claim \"Elon Musk Tesla\" is a general statement. The provided search results primarily focus on biographical information about Elon Musk and his various ventures, including Tesla. Since the claim doesn't specify a particular event or timeframe, it's difficult to assess its temporal validity in relation to November 29, 2025.",
+      "explanation": "The search results confirm that Elon Musk is associated with Tesla. However, the claim is too broad to be definitively verified as true or false. The search results provide biographical information about Elon Musk, including his role as CEO of SpaceX and his connection to Tesla. Without a specific event or context, it's impossible to determine the claim's accuracy on November 29, 2025. The search results do not contain any information that contradicts the general association of Elon Musk with Tesla.\\n\\n🐦 Social Media Perspective: Twitter users (0 tweets): NO_DATA\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "key_evidence": [
+        "Elon Musk is the CEO of SpaceX (Source 2, undated).",
+        "Elon Musk's biography mentions his role as an entrepreneur and engineer (Source 1, undated)."
+      ],
+      "sources": [
+        "埃隆马斯克 - 知乎 (undated)",
+        "伊隆 · 马斯克（Elon Musk） - 知乎 (undated)"
+      ],
+      "warnings": [],
+      "web_sources_found": 10,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.5,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "f0320d9ba5c8f3a0",
+  "generated_at": "2025-11-29T01:53:20.343738"
+}

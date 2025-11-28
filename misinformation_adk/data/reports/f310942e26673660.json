@@ -1,0 +1,55 @@
+{
+  "user_input": "Modi said to buy crypto",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T01:47:15.141179",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Open TIF files in document library - social.technet.microsoft.com",
+      "url": "https://social.technet.microsoft.com/Forums/office/en-US/77043100-e756-4c96-8b53-f345eb4c4322/open-tif-files-in-document-library",
+      "snippet": "In write-protected mode it opens in Microsoft Office Document imaging (MODI) but in the edit-mode it opens in Paint. Of course MODI ist the better tool to edit TIF files. Now I want to open the …",
+      "date": "2025-11-29",
+      "twitter_consensus": "NO_DATA",
+      "social_media_perspective": "Twitter users (0 tweets): NO_DATA",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.1,
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim that \"Modi said to buy crypto\" cannot be verified with the provided web search results as of November 29, 2025. The single web search result is irrelevant to the claim.",
+      "explanation": "The provided web search result is about opening TIF files and has nothing to do with Modi or cryptocurrency. There is no social media consensus data available. Therefore, I cannot verify the claim.\\n\\n🐦 Social Media Perspective: Twitter users (0 tweets): NO_DATA\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "key_evidence": [
+        "No relevant evidence found."
+      ],
+      "sources": [
+        "social.technet.microsoft.com - Publication date not available."
+      ],
+      "warnings": [],
+      "web_sources_found": 1,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.1,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "f310942e26673660",
+  "generated_at": "2025-11-29T01:47:23.063335"
+}

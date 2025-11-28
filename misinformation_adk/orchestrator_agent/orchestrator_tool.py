@@ -226,16 +226,18 @@ class OrchestratorTool(BaseTool):
         """Stage 3: Multi-source fact-checking with temporal verification (like Grok)."""
         from sub_agents.fact_check_agent.gemini_fact_checker_tool import GeminiFactCheckerTool
         from sub_agents.fact_check_agent.web_search_tool import WebSearchTool
-        from sub_agents.fact_check_agent.twitter_search_tool import TwitterSearchTool
+        from sub_agents.fact_check_agent.reddit_search_tool import RedditSearchTool
+        from sub_agents.fact_check_agent.twitter_scraper_tool import TwitterScraperTool
         from sub_agents.fact_check_agent.claim_database_tool import ClaimDatabaseTool
         
         result = {
             "verdict": "UNCERTAIN",
             "confidence": 0.5,
             "temporal_status": "UNCLEAR",
-            "sources_checked": ["gemini_ai_with_web_grounding", "web_search", "twitter_consensus"],
+            "sources_checked": ["gemini_ai_with_web_grounding", "web_search", "reddit_discussions", "twitter_scraper"],
             "explanation": "Fact-checking in progress...",
             "stored_in_db": False,
+            "reddit_consensus": None,
             "twitter_consensus": None,
             "social_media_perspective": ""
         }
@@ -264,36 +266,55 @@ class OrchestratorTool(BaseTool):
         web_tool = WebSearchTool()
         web_result = web_tool.run(query=claim, num_results=15)  # Get more results for better context
         
-        # Get Twitter/social media consensus for diverse perspectives
-        print("  → Checking Twitter/social media consensus...")
-        twitter_tool = TwitterSearchTool()
-        twitter_result = twitter_tool.run(query=claim, max_results=20)
+        # Get social media consensus from Reddit (FREE, no limits)
+        print("  → Checking Reddit for community discussions...")
+        reddit_tool = RedditSearchTool()
+        reddit_result = reddit_tool.run(query=claim, max_results=20)
+        
+        # Try Twitter scraper as secondary source (bypasses API limits)
+        print("  → Checking Twitter via scraper (no API limits)...")
+        twitter_tool = TwitterScraperTool()
+        twitter_result = twitter_tool.run(query=claim, max_results=15)
         
         # Prepare web context for Gemini
         web_context = f"\\n\\nREAL-TIME WEB SEARCH RESULTS ({len(web_result.get('results', []))} sources found):\\n"
         for idx, result in enumerate(web_result.get('results', [])[:10], 1):
             web_context += f"{idx}. {result.get('title', 'N/A')} - {result.get('snippet', 'N/A')}\\n"
         
-        # Add Twitter consensus to context
-        twitter_context = ""
-        if twitter_result.get('consensus'):
+        # Combine Reddit and Twitter consensus
+        social_media_context = ""
+        social_perspectives = []
+        
+        if reddit_result.get('consensus') and reddit_result.get('posts_analyzed', 0) > 0:
+            reddit_consensus = reddit_result.get('consensus', 'N/A')
+            post_count = reddit_result.get('posts_analyzed', 0)
+            subreddits = reddit_result.get('top_subreddits', [])
+            subreddit_names = ', '.join([s['name'] for s in subreddits[:3]])
+            
+            result["reddit_consensus"] = reddit_consensus
+            social_perspectives.append(f"Reddit ({post_count} posts in r/{subreddit_names}): {reddit_consensus}")
+            social_media_context += f"\\n\\nREDDIT DISCUSSIONS ({post_count} posts):\\nConsensus: {reddit_consensus}\\nTop subreddits: {subreddit_names}\\n"
+        
+        if twitter_result.get('consensus') and twitter_result.get('tweets_analyzed', 0) > 0:
             twitter_consensus = twitter_result.get('consensus', 'N/A')
             tweet_count = twitter_result.get('tweets_analyzed', 0)
             result["twitter_consensus"] = twitter_consensus
-            result["social_media_perspective"] = f"Twitter users ({tweet_count} tweets): {twitter_consensus}"
-            twitter_context = f"\\n\\nSOCIAL MEDIA CONSENSUS (Twitter, {tweet_count} tweets):\\n{twitter_consensus}\\n"
+            social_perspectives.append(f"Twitter ({tweet_count} tweets): {twitter_consensus}")
+            social_media_context += f"\\n\\nTWITTER DISCUSSIONS ({tweet_count} tweets via scraper):\\nConsensus: {twitter_consensus}\\n"
+        
+        result["social_media_perspective"] = " | ".join(social_perspectives) if social_perspectives else "No social media data available"
         
         print("  → Running Gemini AI analysis with real-time web + social media data...")
         gemini_tool = GeminiFactCheckerTool()
         
-        # Add context from media analysis, web search AND Twitter consensus
+        # Add context from media analysis, web search AND social media (Reddit + Twitter)
         full_context = ""
         if media_analysis:
             full_context = f"Media type: {media_analysis.get('media_type')}. "
             if media_analysis.get("extracted_text"):
                 full_context += f"Extracted text: {media_analysis.get('extracted_text')}"
         full_context += web_context  # Add web search results
-        full_context += twitter_context  # Add Twitter/social media perspective
+        full_context += social_media_context  # Add Reddit + Twitter perspectives
         
         gemini_result = gemini_tool.run(claim=claim, context=full_context)
         

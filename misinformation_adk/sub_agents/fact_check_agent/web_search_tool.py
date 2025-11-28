@@ -10,6 +10,7 @@ class WebSearchTool(BaseTool):
             name="web_search",
             description="Searches the web for real-time information to verify claims."
         )
+        print("[INFO] Web Search Tool initialized - using DuckDuckGo (no API key required)")
     
     def run(self, query: str, num_results: int = 5) -> dict:
         """
@@ -51,47 +52,55 @@ class WebSearchTool(BaseTool):
     def _duckduckgo_search(self, query: str, num_results: int) -> list:
         """Perform DuckDuckGo search using official library with retry logic."""
         try:
-            # Try new library name first
+            # Try importing the library
             try:
-                from ddgs import DDGS
-            except ImportError:
-                # Fall back to old name
                 from duckduckgo_search import DDGS
+            except ImportError:
+                print("[WEB SEARCH ERROR] duckduckgo_search library not installed")
+                return self._duckduckgo_search_fallback(query, num_results)
             
             results = []
             
             # Retry logic for rate limiting
             for attempt in range(3):
                 try:
-                    with DDGS() as ddgs:
-                        # Search WITHOUT time filter for better results
-                        search_results = ddgs.text(
-                            query,
-                            max_results=num_results * 2  # Get more to filter
-                        )
-                        
-                        for result in search_results:
-                            if len(results) >= num_results:
-                                break
-                            results.append({
-                                'title': result.get('title', ''),
-                                'url': result.get('link', result.get('href', '')),
-                                'snippet': result.get('body', result.get('description', '')),
-                                'date': datetime.now().strftime('%Y-%m-%d')
-                            })
+                    # Initialize DDGS without context manager for better compatibility
+                    ddgs = DDGS()
+                    
+                    # Search with proper parameters
+                    search_results = list(ddgs.text(
+                        keywords=query,
+                        region='wt-wt',  # Worldwide
+                        safesearch='off',
+                        max_results=num_results
+                    ))
+                    
+                    print(f"[WEB SEARCH] DuckDuckGo returned {len(search_results)} raw results")
+                    
+                    for result in search_results:
+                        if len(results) >= num_results:
+                            break
+                        results.append({
+                            'title': result.get('title', ''),
+                            'url': result.get('href', result.get('link', '')),
+                            'snippet': result.get('body', result.get('description', '')),
+                            'date': datetime.now().strftime('%Y-%m-%d')
+                        })
                     
                     if results:
                         break  # Success!
                     
                 except Exception as e:
+                    print(f"[WEB SEARCH] Attempt {attempt + 1} failed: {str(e)[:100]}")
                     if attempt < 2:
                         import time
-                        time.sleep(1)  # Wait before retry
+                        time.sleep(2)  # Wait before retry
                         continue
                     else:
-                        raise e
+                        print(f"[WEB SEARCH] All attempts failed, trying fallback...")
+                        return self._duckduckgo_search_fallback(query, num_results)
             
-            print(f"[WEB SEARCH] Found {len(results)} results for: {query}")
+            print(f"[WEB SEARCH] Successfully found {len(results)} results for: {query}")
             return results
             
         except Exception as e:
