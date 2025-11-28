@@ -1,0 +1,69 @@
+{
+  "user_input": "Modi banned 10 rupee notes",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:20:48.616383",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Attention! Modi government will not withdraw ₹500 notes from …",
+      "url": "https://www.newsbytesapp.com/news/business/will-rs-500-notes-be-withdrawn-by-march-2026-pib-clarifies/story",
+      "snippet": "Jun 4, 2025 · A recent viral YouTube video falsely claimed that the government will cease circulation of ₹500 notes from March 2026, a claim refuted by PIB.",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_FALSE",
+      "social_media_perspective": "Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE",
+      "verdict": "FALSE",
+      "confidence": 0.9,
+      "explanation": "The claim that Modi banned 10 rupee notes is likely false. A major event like banning a currency note would generate widespread news coverage. The search results primarily discuss the demonetization of 500 and 1000 rupee notes in 2016 and a debunked claim about 500 rupee notes. The absence of credible sources confirming a ban on 10 rupee notes as of November 29, 2025, strongly suggests the claim is false. This aligns with a common misinformation pattern of spreading false information about currency bans.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE\n\n✓ High confidence based on multiple authoritative sources.",
+      "misinformation_pattern": "Frequent Fraud",
+      "pattern_confidence": 0.9,
+      "context_card": {
+        "verdict_explanation": "This claim has been identified as FALSE",
+        "confidence_level": "90% confidence",
+        "reasoning": "Based on analysis of 6 web sources (0 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "❌",
+        "color": "red",
+        "why_this_verdict": "Evidence from 0 credible sources contradicts this claim. This information is misleading or incorrect."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is about a current event (as of November 29, 2025) - a ban on 10 rupee notes. The search results include information about past demonetizations of 500 and 1000 rupee notes in 2016, and a false claim about 500 rupee notes being withdrawn in 2026 (debunked in June 2025).",
+      "key_evidence": [
+        "Search results from June 4, 2025, debunk a similar claim about 500 rupee notes being withdrawn.",
+        "The lack of any credible news sources reporting a ban on 10 rupee notes as of November 29, 2025."
+      ],
+      "sources": [
+        "Attention! Modi government will not withdraw ₹500 notes from … - Jun 4, 2025",
+        "Watch: The Moment PM Modi Announced 500 and 1,000 Rupee Notes … - Nov 8, 2016"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Frequent Fraud (90% confidence)"
+      ],
+      "web_sources_found": 6,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 0.9,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "36f036127c9589cd",
+  "generated_at": "2025-11-29T02:21:05.543836"
+}

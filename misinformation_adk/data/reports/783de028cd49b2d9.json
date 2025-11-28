@@ -1,0 +1,68 @@
+{
+  "user_input": "Modi banned 10 rupee notes",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:15:24.516505",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Open TIF files in document library - social.technet.microsoft.com",
+      "url": "https://social.technet.microsoft.com/Forums/office/en-US/77043100-e756-4c96-8b53-f345eb4c4322/open-tif-files-in-document-library",
+      "snippet": "In write-protected mode it opens in Microsoft Office Document imaging (MODI) but in the edit-mode it opens in Paint. Of course MODI ist the better tool to edit TIF files. Now I want to open …",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_FALSE",
+      "social_media_perspective": "Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE",
+      "verdict": "UNVERIFIED",
+      "confidence": 0.5,
+      "explanation": "The provided web search results are irrelevant to the claim that Modi banned 10 rupee notes. The first result discusses opening TIF files, and the Reddit discussions cover unrelated topics. Therefore, I cannot verify the claim's accuracy using the provided information. However, claims about currency bans are a frequent type of fraud.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "Frequent Fraud",
+      "pattern_confidence": 0.7,
+      "context_card": {
+        "verdict_explanation": "This claim is UNVERIFIED",
+        "confidence_level": "50% confidence",
+        "reasoning": "Analyzed 1 sources, but couldn't find definitive confirmation or denial.",
+        "icon": "❓",
+        "color": "gray",
+        "why_this_verdict": "Found information about the topic but not enough evidence to confirm or deny the specific claim. Only 0 credible sources available."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is about a potential ban on 10 rupee notes. Without relevant search results, it's impossible to determine when this ban supposedly occurred or if it's even true as of November 29, 2025.",
+      "key_evidence": [
+        "No relevant evidence found in the provided search results."
+      ],
+      "sources": [
+        "social.technet.microsoft.com"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Frequent Fraud (70% confidence)"
+      ],
+      "web_sources_found": 1,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNVERIFIED",
+  "confidence": 0.5,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "783de028cd49b2d9",
+  "generated_at": "2025-11-29T02:15:42.848231"
+}

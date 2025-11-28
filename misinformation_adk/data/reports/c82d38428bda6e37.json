@@ -1,0 +1,57 @@
+{
+  "user_input": "Modi banned 10 rupee notes",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:11:29.413645",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Open TIF files in document library - social.technet.microsoft.com",
+      "url": "https://social.technet.microsoft.com/Forums/office/en-US/77043100-e756-4c96-8b53-f345eb4c4322/open-tif-files-in-document-library",
+      "snippet": "In write-protected mode it opens in Microsoft Office Document imaging (MODI) but in the edit-mode it opens in Paint. Of course MODI ist the better tool to edit TIF files. Now I want to open …",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_FALSE",
+      "social_media_perspective": "Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE",
+      "verdict": "INSUFFICIENT_DATA",
+      "confidence": 0.0,
+      "explanation": "Unable to find sufficient information about this claim. Searched 1 sources but none were relevant. This could mean: (1) The claim is too vague or unclear, (2) It's a very recent event not yet indexed, (3) It may be fabricated or fictional. Please provide more context or rephrase the claim.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "context_card": {
+        "reason": "Insufficient Data",
+        "details": "Searched 1 web sources and 20 Reddit posts, but found no relevant information.",
+        "recommendation": "Provide more specific details, dates, or context about the claim."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "",
+      "key_evidence": [],
+      "sources": [],
+      "warnings": [],
+      "web_sources_found": 1,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "INSUFFICIENT_DATA",
+  "confidence": 0.0,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "c82d38428bda6e37",
+  "generated_at": "2025-11-29T02:11:44.644781"
+}

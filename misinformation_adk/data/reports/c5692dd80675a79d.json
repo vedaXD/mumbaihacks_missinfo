@@ -1,0 +1,60 @@
+{
+  "user_input": "Modi banned 10 rupee notes",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:10:53.705953",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Attention! Modi government will not withdraw ₹500 notes from …",
+      "url": "https://www.newsbytesapp.com/news/business/will-rs-500-notes-be-withdrawn-by-march-2026-pib-clarifies/story",
+      "snippet": "Jun 4, 2025 · A recent viral YouTube video falsely claimed that the government will cease circulation of ₹500 notes from March 2026, a claim refuted by PIB.",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_FALSE",
+      "social_media_perspective": "Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "explanation": "Error during fact-checking: 404 models/gemini-1.5-pro-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/leagueoflegends, wallstreet, BeAmazed): LIKELY_FALSE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "context_card": {
+        "verdict_explanation": "Unable to determine if this claim is true or false",
+        "confidence_level": "0% confidence",
+        "reasoning": "Searched 6 web sources, 20 Reddit posts, and 0 tweets.",
+        "icon": "❓",
+        "color": "gray",
+        "why_this_verdict": "Search results were either irrelevant, insufficient, or contradictory. More information needed to make a determination."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "",
+      "key_evidence": [],
+      "sources": [],
+      "warnings": [],
+      "web_sources_found": 6,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.0,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "c5692dd80675a79d",
+  "generated_at": "2025-11-29T02:11:10.641918"
+}

@@ -223,7 +223,7 @@ class OrchestratorTool(BaseTool):
         return result
     
     def _fact_check(self, claim: str, previous_stages: dict) -> dict:
-        """Stage 3: Multi-source fact-checking with temporal verification (like Grok)."""
+        """Stage 3: Multi-source fact-checking with temporal verification."""
         from sub_agents.fact_check_agent.gemini_fact_checker_tool import GeminiFactCheckerTool
         from sub_agents.fact_check_agent.web_search_tool import WebSearchTool
         from sub_agents.fact_check_agent.reddit_search_tool import RedditSearchTool
@@ -261,10 +261,10 @@ class OrchestratorTool(BaseTool):
             )
             return result
         
-        # Run Gemini fact-checking with web grounding (like Grok's real-time verification)
-        print("  → Running web search for real-time information...")
+        # Run Gemini fact-checking with web grounding for real-time verification
+        print("  → Running comprehensive web search (20+ sources)...")
         web_tool = WebSearchTool()
-        web_result = web_tool.run(query=claim, num_results=15)  # Get more results for better context
+        web_result = web_tool.run(query=claim, num_results=30)  # Get more results for better context
         
         # Get social media consensus from Reddit (FREE, no limits)
         print("  → Checking Reddit for community discussions...")
@@ -319,15 +319,36 @@ class OrchestratorTool(BaseTool):
         gemini_result = gemini_tool.run(claim=claim, context=full_context)
         
         # Combine results from Gemini AI + web + social media sources
-        result["verdict"] = gemini_result.get("verdict", "UNCERTAIN")
-        result["confidence"] = gemini_result.get("confidence", 0.5)
+        verdict = gemini_result.get("verdict", "UNCERTAIN")
+        confidence = gemini_result.get("confidence", 0.5)
+        
+        # Smart logic: If web results are irrelevant AND confidence is low, provide context
+        web_sources_count = len(web_result.get("results", []))
+        credible_sources_count = len(web_result.get("credible_sources", []))
+        
+        # Let Gemini determine verdict with misinformation pattern detection
+        result["verdict"] = verdict
+        result["confidence"] = confidence
+        result["explanation"] = gemini_result.get("explanation", "")
+        result["misinformation_pattern"] = gemini_result.get("misinformation_pattern", None)
+        result["pattern_confidence"] = gemini_result.get("pattern_confidence", 0.0)
+        
+        # Add context card explaining the verdict
+        result["context_card"] = self._generate_context_card(
+            verdict, confidence, web_sources_count, credible_sources_count,
+            reddit_result.get('posts_analyzed', 0),
+            twitter_result.get('tweets_analyzed', 0),
+            gemini_result.get("misinformation_pattern"),
+            gemini_result.get("pattern_confidence", 0.0)
+        )
+        
         result["temporal_status"] = gemini_result.get("temporal_status", "UNCLEAR")
         result["time_verification"] = gemini_result.get("time_verification", "")
-        result["explanation"] = gemini_result.get("explanation", "")
         result["key_evidence"] = gemini_result.get("key_evidence", [])
         result["sources"] = gemini_result.get("sources", [])
         result["warnings"] = gemini_result.get("warnings", [])
-        result["web_sources_found"] = len(web_result.get("results", []))
+        result["web_sources_found"] = web_sources_count
+        result["credible_sources_found"] = credible_sources_count
         
         # Add social media perspective to explanation if available
         if result["social_media_perspective"]:
@@ -369,6 +390,90 @@ class OrchestratorTool(BaseTool):
                 result["explanation"] += "\n\n✓ High confidence based on multiple authoritative sources."
         
         return result
+    
+    def _generate_context_card(self, verdict: str, confidence: float, 
+                                web_sources: int, credible_sources: int,
+                                reddit_posts: int, tweets: int,
+                                misinfo_pattern: str = None, pattern_confidence: float = 0.0) -> dict:
+        """Generate contextual card explaining why this verdict was reached."""
+        
+        # Determine card type and content based on verdict
+        if verdict == "TRUE":
+            return {
+                "verdict_explanation": "This claim has been verified as TRUE",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Based on analysis of {web_sources} web sources ({credible_sources} credible), {reddit_posts} Reddit discussions, and {tweets} tweets.",
+                "icon": "✅",
+                "color": "green",
+                "why_this_verdict": f"Multiple credible sources confirm this claim. Found {credible_sources} authoritative sources (news agencies, academic, government) that verify the information."
+            }
+        elif verdict == "FALSE":
+            return {
+                "verdict_explanation": "This claim has been identified as FALSE",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Based on analysis of {web_sources} web sources ({credible_sources} credible), {reddit_posts} Reddit discussions, and {tweets} tweets.",
+                "icon": "❌",
+                "color": "red",
+                "why_this_verdict": f"Evidence from {credible_sources} credible sources contradicts this claim. This information is misleading or incorrect."
+            }
+        elif verdict == "LIKELY_FALSE":
+            additional_explanation = ""
+            if credible_sources == 0 and web_sources < 5:
+                additional_explanation = " 💡 Major events generate widespread coverage. The complete absence of credible sources strongly indicates this is fabricated misinformation."
+            return {
+                "verdict_explanation": "This claim is LIKELY FALSE",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Based on analysis of {web_sources} web sources ({credible_sources} credible), {reddit_posts} Reddit discussions, and {tweets} tweets.",
+                "icon": "⚠️",
+                "color": "orange-red",
+                "why_this_verdict": f"No credible sources found to verify this claim. For significant events, the absence of coverage strongly suggests the claim is false.{additional_explanation}"
+            }
+        elif verdict == "PARTIALLY_TRUE":
+            return {
+                "verdict_explanation": "This claim is PARTIALLY TRUE",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Based on analysis of {web_sources} web sources ({credible_sources} credible), {reddit_posts} Reddit discussions, and {tweets} tweets.",
+                "icon": "⚠️",
+                "color": "orange",
+                "why_this_verdict": "Some aspects of this claim are accurate, but important context or details are missing or incorrect."
+            }
+        elif verdict == "OUTDATED_INFO":
+            return {
+                "verdict_explanation": "This claim contains OUTDATED INFORMATION",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Based on temporal analysis and {web_sources} current sources.",
+                "icon": "📅",
+                "color": "yellow",
+                "why_this_verdict": "This information was accurate in the past but is no longer current. The claim may be presenting old news as if it's recent."
+            }
+        elif verdict == "UNVERIFIED":
+            return {
+                "verdict_explanation": "This claim is UNVERIFIED",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Analyzed {web_sources} sources, but couldn't find definitive confirmation or denial.",
+                "icon": "❓",
+                "color": "gray",
+                "why_this_verdict": f"Found information about the topic but not enough evidence to confirm or deny the specific claim. Only {credible_sources} credible sources available."
+            }
+        else:  # UNCERTAIN
+            base_card = {
+                "verdict_explanation": "Unable to determine if this claim is true or false",
+                "confidence_level": f"{confidence*100:.0f}% confidence",
+                "reasoning": f"Searched {web_sources} web sources, {reddit_posts} Reddit posts, and {tweets} tweets.",
+                "icon": "❓",
+                "color": "gray",
+                "why_this_verdict": "Search results were either irrelevant, insufficient, or contradictory. More information needed to make a determination."
+            }
+            
+            # Add misinformation pattern detection if available
+            if misinfo_pattern and pattern_confidence > 0.5:
+                base_card["misinformation_alert"] = {
+                    "pattern_detected": misinfo_pattern,
+                    "pattern_confidence": f"{pattern_confidence*100:.0f}%",
+                    "warning": f"⚠️ This claim matches common misinformation pattern: {misinfo_pattern}"
+                }
+            
+            return base_card
     
     def _generate_education(self, pipeline_result: dict) -> dict:
         """Stage 4: Educational content generation."""

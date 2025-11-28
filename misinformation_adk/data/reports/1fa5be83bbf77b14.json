@@ -1,0 +1,54 @@
+{
+  "user_input": "did modi say demonitization of 10rs",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T02:03:19.034674",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解 …",
+      "date": "2025-11-29",
+      "social_media_perspective": "No social media data available",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.2,
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The provided search results do not contain any information about Narendra Modi demonetizing 10 Rupee notes. The search results are primarily about \"DID\" (Difference in Differences) models in econometrics and Dissociative Identity Disorder. Therefore, it's impossible to verify the claim with the given information as of November 29, 2025.",
+      "explanation": "The search results are irrelevant to the claim. They focus on statistical models and psychological disorders, not Indian currency or economic policy. There is no mention of Modi or demonetization of any currency. Therefore, I cannot verify the claim.\\n\\n🐦 Social Media Perspective: No social media data available\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "key_evidence": [
+        "None of the provided search results mention Modi, demonetization, or 10 Rupee notes."
+      ],
+      "sources": [
+        "All sources are irrelevant to the claim."
+      ],
+      "warnings": [],
+      "web_sources_found": 10,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "UNCERTAIN",
+  "confidence": 0.2,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "1fa5be83bbf77b14",
+  "generated_at": "2025-11-29T02:03:34.939445"
+}
