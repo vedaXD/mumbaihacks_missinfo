@@ -607,3 +607,68 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         // Ignore errors (might not have permission)
     }
 });
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Check if Ctrl+Shift is pressed (or Cmd+Shift on Mac)
+    const modifierKey = e.ctrlKey || e.metaKey;
+    
+    if (modifierKey && e.shiftKey) {
+        switch (e.key.toUpperCase()) {
+            case 'F':
+                // Ctrl+Shift+F: Check current page
+                e.preventDefault();
+                if (!checkPageBtn.disabled) {
+                    checkPageBtn.click();
+                }
+                break;
+            
+            case 'C':
+                // Ctrl+Shift+C: Check selected text
+                e.preventDefault();
+                if (!checkSelectionBtn.disabled) {
+                    checkSelectionBtn.click();
+                }
+                break;
+            
+            case 'T':
+                // Ctrl+Shift+T: Focus text input and check
+                e.preventDefault();
+                contentInput.focus();
+                break;
+            
+            case 'Y':
+                // Ctrl+Shift+Y: Check YouTube video
+                e.preventDefault();
+                if (!checkYouTubeBtn.disabled) {
+                    checkYouTubeBtn.click();
+                }
+                break;
+        }
+    }
+    
+    // Enter key in textarea: Check text
+    if (e.key === 'Enter' && e.ctrlKey && document.activeElement === contentInput) {
+        e.preventDefault();
+        if (!checkTextBtn.disabled && contentInput.value.trim()) {
+            checkTextBtn.click();
+        }
+    }
+    
+    // Escape key: Clear results
+    if (e.key === 'Escape') {
+        hideResult();
+        contentInput.value = '';
+        contentInput.focus();
+    }
+    
+    // Tab navigation (1-4 for tabs)
+    if (e.altKey && ['1', '2', '3', '4'].includes(e.key)) {
+        e.preventDefault();
+        const tabs = document.querySelectorAll('.tab');
+        const tabIndex = parseInt(e.key) - 1;
+        if (tabs[tabIndex]) {
+            tabs[tabIndex].click();
+        }
+    }
+});
