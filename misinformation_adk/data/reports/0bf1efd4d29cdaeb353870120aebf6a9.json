@@ -1,0 +1,25 @@
+{
+  "media_type": "image",
+  "filename": "deepfake 1.png",
+  "deepfake_analysis": {
+    "is_deepfake": true,
+    "confidence": 0.9599149227142334,
+    "explanation": "Image detected as AI-GENERATED/FAKE with 96.0% confidence. The model identified artificial patterns consistent with deepfake or synthetic image generation.",
+    "technical_details": {
+      "model": "EfficientNet-B0 (Custom Trained)",
+      "real_probability": 0.04008512198925018,
+      "fake_probability": 0.9599149227142334
+    }
+  },
+  "content_analysis": {
+    "verdict": "NO_TEXT_CONTENT",
+    "confidence": 1.0,
+    "summary": "",
+    "explanation": "Insufficient text content (0 words, need 10+ for meaningful analysis)",
+    "sources": []
+  },
+  "overall_verdict": "⚠️ DEEPFAKE DETECTED: Media is manipulated/fabricated, but content accuracy is uncertain.",
+  "timestamp": "2025-11-29T04:47:19.782787",
+  "report_id": "0bf1efd4d29cdaeb353870120aebf6a9",
+  "generated_at": "2025-11-29T04:47:19.782872"
+}

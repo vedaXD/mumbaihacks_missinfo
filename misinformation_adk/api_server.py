@@ -203,9 +203,10 @@ async def analyze_media(
             content_type=media_type
         )
         
-        # Extract deepfake and fact-check results
-        deepfake_analysis = result.get('media_analysis', {})
-        fact_check = result.get('fact_check', {})
+        # Extract deepfake and fact-check results (correct path from orchestrator)
+        stages = result.get('stages', {})
+        deepfake_analysis = stages.get('media_analysis', {})
+        fact_check = stages.get('fact_check', {})
         
         # Determine overall verdict
         is_deepfake = False
@@ -213,7 +214,7 @@ async def analyze_media(
         
         if media_type == 'image':
             deepfake_data = deepfake_analysis.get('image_deepfake', {})
-            is_deepfake = deepfake_data.get('is_manipulated', False)
+            is_deepfake = deepfake_data.get('is_manipulated', False) or deepfake_data.get('is_deepfake', False)
         elif media_type == 'video':
             deepfake_data = deepfake_analysis.get('video_deepfake', {})
             is_deepfake = deepfake_data.get('is_deepfake', False)
@@ -225,6 +226,10 @@ async def analyze_media(
         
         content_verdict = fact_check.get('verdict', 'UNCERTAIN')
         content_confidence = fact_check.get('confidence', 0.5)
+        
+        # Debug print to verify extraction
+        print(f"[DEBUG] Extracted deepfake status: is_deepfake={is_deepfake}, confidence={deepfake_data.get('confidence', 0.0)}")
+        print(f"[DEBUG] Content verdict: {content_verdict}, confidence={content_confidence}")
         
         # Create overall verdict message
         if is_deepfake and content_verdict == 'FALSE':
