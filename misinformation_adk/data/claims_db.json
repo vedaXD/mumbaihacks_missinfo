@@ -1,3 +1,191 @@
 {
-  "claims": []
-}
+  "claims": [
+    {
+      "id": "5370a3c8ab0714f80560964475e2b68f",
+      "claim": "\"Breaking: Scientists discover water on Mars today\"",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Gemini model not configured. Set GOOGLE_API_KEY environment variable.",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0
+        },
+        "web_search": {
+          "query": "\"Breaking: Scientists discover water on Mars today\"",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "twitter": {
+          "error": "Twitter API not configured. Set TWITTER_BEARER_TOKEN environment variable.",
+          "query": "\"Breaking: Scientists discover water on Mars today\"",
+          "consensus": "UNAVAILABLE",
+          "tweets_analyzed": 0
+        }
+      },
+      "first_checked": "2025-11-27T19:29:15.923089",
+      "last_checked": "2025-11-27T19:29:15.923089",
+      "check_count": 1,
+      "status": "pending"
+    },
+    {
+      "id": "d1aa1bcb50f3328139cc98ee2ce78789",
+      "claim": "did modi say he is gay",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Gemini model not configured. Set GOOGLE_API_KEY environment variable.",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0
+        },
+        "web_search": {
+          "query": "did modi say he is gay",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "twitter": {
+          "error": "Twitter API not configured. Set TWITTER_BEARER_TOKEN environment variable.",
+          "query": "did modi say he is gay",
+          "consensus": "UNAVAILABLE",
+          "tweets_analyzed": 0
+        }
+      },
+      "first_checked": "2025-11-27T19:29:40.342903",
+      "last_checked": "2025-11-27T19:29:40.342903",
+      "check_count": 1,
+      "status": "pending"
+    },
+    {
+      "id": "8540820404c23a53708bf78a9854444f",
+      "claim": "The Earth is flat",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Tool.__init__() got an unexpected keyword argument 'google_search'",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0,
+          "explanation": "Error during fact-checking: Tool.__init__() got an unexpected keyword argument 'google_search'"
+        },
+        "web_search": {
+          "query": "The Earth is flat",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "timestamp": "2025-11-27T19:48:32.281024"
+      },
+      "first_checked": "2025-11-27T19:47:20.761538",
+      "last_checked": "2025-11-27T19:48:33.831986",
+      "check_count": 4,
+      "status": "pending"
+    },
+    {
+      "id": "7b1dbceff07e872d4a9d5b6585a8ba50",
+      "claim": "is modi gay",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Gemini model not configured. Set GOOGLE_API_KEY environment variable.",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0
+        },
+        "web_search": {
+          "query": "is modi gay",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "timestamp": "2025-11-27T19:52:12.958317"
+      },
+      "first_checked": "2025-11-27T19:52:14.374655",
+      "last_checked": "2025-11-27T19:52:14.374655",
+      "check_count": 1,
+      "status": "pending"
+    },
+    {
+      "id": "9d93ad491b0d088b9fb637d8c204eed2",
+      "claim": "did modi say rahul gandhi is gay",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Gemini model not configured. Set GOOGLE_API_KEY environment variable.",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0
+        },
+        "web_search": {
+          "query": "did modi say rahul gandhi is gay",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "timestamp": "2025-11-27T19:52:30.556834"
+      },
+      "first_checked": "2025-11-27T19:52:30.832899",
+      "last_checked": "2025-11-27T19:52:30.832899",
+      "check_count": 1,
+      "status": "pending"
+    },
+    {
+      "id": "ba660f5965db1603d02a69a780ac856c",
+      "claim": "is earth flat",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "error": "Gemini model not configured. Set GOOGLE_API_KEY environment variable.",
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0,
+          "temporal_status": "UNCLEAR",
+          "explanation": "",
+          "key_evidence": [],
+          "sources": [],
+          "warnings": []
+        },
+        "web_search": {
+          "query": "is earth flat",
+          "results": [],
+          "credible_sources": [],
+          "consensus": "No consensus found - insufficient search results.",
+          "total_results": 0
+        },
+        "timestamp": "2025-11-27T19:57:20.336183"
+      },
+      "first_checked": "2025-11-27T19:52:38.103230",
+      "last_checked": "2025-11-27T19:57:21.953954",
+      "check_count": 7,
+      "status": "pending"
+    },
+    {
+      "id": "f09b35f7ef5356c00eb68a4cd85e7ee1",
+      "claim": "Did Trump win the 2024 US presidential election?",
+      "verdict": "UNCERTAIN",
+      "confidence": 0.0,
+      "evidence": {
+        "gemini": {
+          "verdict": "UNCERTAIN",
+          "confidence": 0.0,
+          "temporal_status": "UNCLEAR",
+          "time_verification": "Today is November 27, 2025. The claim refers to the 2024 US presidential election. Without any web search results, I cannot determine the outcome of the 2024 election.",
+          "explanation": "I am unable to determine if Trump won the 2024 US presidential election because no web search results were provided. I need access to credible sources from 2024 and 2025 to verify the outcome.",
+          "key_evidence": [
+            "No evidence available.",
+            "No evidence available."
+          ],
+          "sources": [
+            "No sources available.",
+            "No sources available."
+          ],
+          "twitter_consensus": "No information available.",
+          "warnings": [],
+          "grounding_metadata": 
