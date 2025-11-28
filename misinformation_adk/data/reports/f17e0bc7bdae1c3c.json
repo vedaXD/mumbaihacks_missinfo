@@ -1,0 +1,68 @@
+{
+  "user_input": "Dharmendra is dead",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T03:53:45.628593",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Tributes pour in as Veteran actor Dharmendra passes away",
+      "url": "https://www.thehindu.com/entertainment/actor-dharmendra-death-bollywood-funeral-movies-live-updates-on-november-24-2025/article70265484.ece",
+      "snippet": "4 days ago · The heartbeat of Hindi cinema’s golden era, who turned raw instinct into cinematic immortality, Dharmendra passed away in Mumbai on Monday (November 24, 2025) due to …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (9 posts in r/CATiim, IndiansSpeak, AskIndia): MIXED",
+      "verdict": "TRUE",
+      "confidence": 1.0,
+      "explanation": "The web search results overwhelmingly confirm that Dharmendra passed away on November 24, 2025. Multiple credible news sources, including BBC and NDTV, report his death at the age of 89. The search results also include details about his funeral and tributes from Bollywood celebrities. The Reddit discussions show mixed reactions, but the news reports are consistent.\\n\\n🐦 Social Media Perspective: Reddit (9 posts in r/CATiim, IndiansSpeak, AskIndia): MIXED\n\n✓ High confidence based on multiple authoritative sources.",
+      "misinformation_pattern": null,
+      "pattern_confidence": 0.0,
+      "context_card": {
+        "verdict_explanation": "This claim has been verified as TRUE",
+        "confidence_level": "100% confidence",
+        "reasoning": "Based on analysis of 10 web sources (0 credible), 9 Reddit discussions, and 0 tweets.",
+        "icon": "✅",
+        "color": "green",
+        "why_this_verdict": "Multiple credible sources confirm this claim. Found 0 authoritative sources (news agencies, academic, government) that verify the information."
+      },
+      "temporal_status": "CURRENT",
+      "time_verification": "The claim is about Dharmendra's death, and the search results indicate he passed away on November 24, 2025, which is recent information as of today, November 29, 2025.",
+      "key_evidence": [
+        "BBC reported on November 2025 that Dharmendra passed away at 89.",
+        "NDTV reported on November 2025 about Dharmendra's death and his career."
+      ],
+      "sources": [
+        "[BBC] Dharmendra: Bollywood's 'He-Man' dies at 89 - BBC",
+        "[NDTV] Dharmendra, The Star Actor, And His (Brief) Political Career As Lok Sabha MP - NDTV"
+      ],
+      "warnings": [],
+      "web_sources_found": 10,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "TRUE",
+  "confidence": 1.0,
+  "recommendations": [
+    "Content appears verified, but always maintain healthy skepticism",
+    "Share responsibly with proper context"
+  ],
+  "report_id": "f17e0bc7bdae1c3c",
+  "generated_at": "2025-11-29T03:54:01.768652",
+  "original_content": "Dharmendra is dead"
+}

@@ -1,0 +1,70 @@
+{
+  "user_input": "Modi is dead",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T03:52:42.789959",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Open TIF files in document library - social.technet.microsoft.com",
+      "url": "https://social.technet.microsoft.com/Forums/office/en-US/77043100-e756-4c96-8b53-f345eb4c4322/open-tif-files-in-document-library",
+      "snippet": "In write-protected mode it opens in Microsoft Office Document imaging (MODI) but in the edit-mode it opens in Paint. Of course MODI ist the better tool to edit TIF files. Now I want to open the file in edit …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (20 posts in r/delhi, NewDelhi, unitedstatesofindia): MIXED",
+      "verdict": "FALSE",
+      "confidence": 0.9,
+      "explanation": "The claim that \"Modi is dead\" is a false claim. The search results include a PTI Fact Check article specifically addressing and debunking a social media post making this false claim. Other articles show PM Modi commenting on other events, indicating he is alive. The absence of any credible news sources reporting his death, combined with the presence of a fact-check debunking the claim, strongly suggests it is a hoax. A death of a major world leader would generate widespread coverage.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/delhi, NewDelhi, unitedstatesofindia): MIXED\n\n✓ High confidence based on multiple authoritative sources.",
+      "misinformation_pattern": "Celebrity Death Hoax",
+      "pattern_confidence": 0.9,
+      "context_card": {
+        "verdict_explanation": "This claim has been identified as FALSE",
+        "confidence_level": "90% confidence",
+        "reasoning": "Based on analysis of 1 web sources (0 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "❌",
+        "color": "red",
+        "why_this_verdict": "Evidence from 0 credible sources contradicts this claim. This information is misleading or incorrect."
+      },
+      "temporal_status": "CURRENT",
+      "time_verification": "The claim is being made on November 29, 2025. The search results indicate that this claim is false as of November 29, 2025.",
+      "key_evidence": [
+        "PTI Fact Check: This social media post misleads users with false claim about PM Modi’s death - Press Trust of India (November 29, 2025)",
+        "Delhi Red Fort blast updates: India’s Modi alleges ‘conspiracy’ as 13 dead - Al Jazeera (November 29, 2025)"
+      ],
+      "sources": [
+        "Press Trust of India (November 29, 2025)",
+        "Al Jazeera (November 29, 2025)"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Celebrity Death Hoax (90% confidence)"
+      ],
+      "web_sources_found": 1,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 0.9,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "88072f921baf7ab0",
+  "generated_at": "2025-11-29T03:53:01.046377",
+  "original_content": "Modi is dead"
+}

@@ -20,6 +20,10 @@ from orchestrator_agent.orchestrator_tool import OrchestratorTool
 load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
+# Base URL for reports (use ngrok/public URL in production, or None for local)
+# Telegram doesn't accept localhost URLs in inline keyboards
+BASE_URL = os.getenv('BASE_URL', None)  # Set BASE_URL in .env for production (e.g., https://your-domain.com)
+
 # Initialize orchestrator
 orchestrator = OrchestratorTool()
 
@@ -120,14 +124,20 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Format response with detailed context (same as API server)
         response = format_text_result(result)
         
-        # Create inline keyboard for detailed report
-        report_url = f"http://localhost:8000/report/{report_id}"
-        keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-        ]])
+        # Add report link
+        keyboard = None
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        # Delete thinking message and send result
-        await thinking_msg.delete()
+        # Try to delete thinking message, but don't fail if it's already gone
+        try:
+            await thinking_msg.delete()
+        except:
+            pass  # Message might already be deleted or too old
+        
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -142,7 +152,10 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         error_msg += "• Simplifying your claim\n"
         error_msg += "• Sending it again\n"
         error_msg += "• Using /help for guidance"
-        await thinking_msg.edit_text(error_msg, parse_mode=ParseMode.MARKDOWN)
+        try:
+            await thinking_msg.edit_text(error_msg, parse_mode=ParseMode.MARKDOWN)
+        except:
+            await update.message.reply_text(error_msg, parse_mode=ParseMode.MARKDOWN)
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -195,14 +208,19 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Format response with detailed context
         response = format_image_result(result)
         
-        # Create inline keyboard
-        report_url = f"http://localhost:8000/report/{report_id}"
-        keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-        ]])
+        # Add report link
+        keyboard = None
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
         # Send result
-        await thinking_msg.delete()
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -214,7 +232,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing image: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing image: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing image: {str(e)}")
 
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -258,13 +279,19 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Format response
         response = format_video_result(result)
         
-        # Create inline keyboard
-        report_url = f"http://localhost:8000/report/{report_id}"
-        keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-        ]])
+        # Add report link
+        keyboard = None
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        await thinking_msg.delete()
+        # Try to delete thinking message
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -276,7 +303,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing video: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing video: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing video: {str(e)}")
 
 
 async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -333,13 +363,19 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Format response
         response = format_audio_result(result)
         
-        # Create inline keyboard
-        report_url = f"http://localhost:8000/report/{report_id}"
-        keyboard = InlineKeyboardMarkup([[
-            InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-        ]])
+        # Add report link
+        keyboard = None
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        await thinking_msg.delete()
+        # Try to delete thinking message
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -351,25 +387,20 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing audio: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing audio: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing audio: {str(e)}")
 
 
 def format_text_result(result: dict) -> str:
-    """Format text fact-checking result for Telegram with full context (API server logic)."""
-    # Extract fact-check data (same structure as API server)
+    """Format text fact-checking result for Telegram - concise version."""
     fact_check = result.get("stages", {}).get("fact_check", {})
     
     verdict = fact_check.get("verdict", "UNCERTAIN")
     confidence = fact_check.get("confidence", 0.0)
-    temporal_status = fact_check.get("temporal_status", "UNCLEAR")
-    time_verification = fact_check.get("time_verification", "")
     explanation = fact_check.get("explanation", "No explanation available.")
-    key_evidence = fact_check.get("key_evidence", [])
     sources = fact_check.get("sources", [])
-    warnings = fact_check.get("warnings", [])
-    web_sources = fact_check.get("web_sources_found", 0)
-    news_articles = fact_check.get("news_articles_found", 0)
-    social_perspective = fact_check.get("social_media_perspective", "")
     
     # Emoji based on verdict
     emoji_map = {
@@ -382,200 +413,92 @@ def format_text_result(result: dict) -> str:
     }
     emoji = emoji_map.get(verdict, '🤔')
     
-    # Build comprehensive response
-    response = f"**{emoji} FACT-CHECK RESULT**\n\n"
-    response += f"**Verdict:** {verdict.replace('_', ' ')}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
+    # Build concise response
+    response = f"{emoji} **{verdict.replace('_', ' ')}** ({confidence:.0%} confidence)\n\n"
     
-    # Warnings (if any)
-    if warnings:
-        response += "⚠️ **Warnings:**\n"
-        for warning in warnings[:2]:  # Limit to 2 warnings
-            response += f"• {warning}\n"
-        response += "\n"
-    
-    # Temporal status
-    if temporal_status != "UNCLEAR":
-        temporal_emoji = {"CURRENT": "🕒", "OUTDATED": "⏰", "HISTORICAL": "📜"}.get(temporal_status, "⏰")
-        response += f"{temporal_emoji} **Time Status:** {temporal_status}\n"
-        if time_verification:
-            response += f"_{time_verification[:150]}_\n\n"
-    
-    # Main explanation
-    response += f"📝 **Analysis:**\n{explanation[:600]}\n\n"  # Limit to 600 chars
-    
-    # Key evidence (top 3)
-    if key_evidence:
-        response += "🔍 **Key Evidence:**\n"
-        for i, evidence in enumerate(key_evidence[:3], 1):
-            response += f"{i}. {evidence[:120]}\n"
-        response += "\n"
+    # Short explanation (max 250 chars)
+    response += f"{explanation[:250]}{'...' if len(explanation) > 250 else ''}\n\n"
     
     # Sources summary
-    if sources or web_sources > 0:
-        response += "📚 **Sources Checked:**\n"
-        if news_articles > 0:
-            response += f"• {news_articles} Google News articles\n"
-        if web_sources > 0:
-            response += f"• {web_sources} web sources verified\n"
-        if sources:
-            response += f"• Top sources: {', '.join(sources[:3])}\n"
-        response += "\n"
-    
-    # Social media perspective
-    if social_perspective:
-        response += f"🐦 **Social Media:**\n{social_perspective[:200]}\n\n"
-    
-    response += "💡 _Tap 'View Detailed Report' for complete analysis with all sources_"
+    if sources:
+        response += f"📚 Sources: {', '.join(sources[:2])}{'...' if len(sources) > 2 else ''}\n"
     
     return response
 
 
 def format_image_result(result: dict) -> str:
-    """Format image analysis result for Telegram with full context (API server logic)."""
-    # Extract media analysis (same as API server)
+    """Format image analysis result for Telegram - concise version."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
     fact_check = result.get('stages', {}).get('fact_check', {})
     
-    # Deepfake detection
     image_deepfake = media_analysis.get('image_deepfake', {})
     is_deepfake = image_deepfake.get('is_manipulated', False)
     deepfake_confidence = image_deepfake.get('confidence', 0.0)
-    deepfake_explanation = image_deepfake.get('explanation', 'No analysis available')
     
-    # OCR results
     ocr_data = media_analysis.get('ocr', {})
     ocr_text = ocr_data.get('extracted_text', '')
     
-    # Content fact-check (if OCR text was analyzed)
     content_verdict = fact_check.get('verdict', 'UNCERTAIN')
     content_confidence = fact_check.get('confidence', 0.0)
-    content_explanation = fact_check.get('explanation', '')
     
-    # Build response
     emoji = '❌' if is_deepfake else '✅'
-    status = 'AI-GENERATED / DEEPFAKE' if is_deepfake else 'AUTHENTIC IMAGE'
+    status = 'AI-GENERATED' if is_deepfake else 'AUTHENTIC'
     
-    response = f"**{emoji} IMAGE ANALYSIS REPORT**\n\n"
+    response = f"🖼️ {emoji} **{status}** ({deepfake_confidence:.0%})\n\n"
     
-    # Overall assessment
-    if is_deepfake and content_verdict == 'FALSE':
-        response += "⚠️ **DOUBLE ALERT:** Image is AI-GENERATED and content is FALSE!\n\n"
-    elif is_deepfake and content_verdict == 'TRUE':
-        response += "⚠️ **MIXED RESULT:** Image is fake but claims are TRUE.\n\n"
-    elif is_deepfake:
-        response += "⚠️ **DEEPFAKE DETECTED:** Image authenticity questionable.\n\n"
-    elif content_verdict == 'FALSE':
-        response += "❌ **FALSE CONTENT:** Image is real but claims are FALSE.\n\n"
-    else:
-        response += "✅ **VERIFIED:** Image appears authentic.\n\n"
-    
-    # Deepfake analysis
-    response += f"🎨 **Media Authenticity:**\n"
-    response += f"Status: {status}\n"
-    response += f"Confidence: {deepfake_confidence:.0%}\n"
-    response += f"_{deepfake_explanation[:200]}_\n\n"
-    
-    # OCR extracted text
+    # OCR text if available
     if ocr_text:
-        word_count = len(ocr_text.split())
-        response += f"📝 **Extracted Text:** ({word_count} words)\n"
-        response += f"_{ocr_text[:300]}..._\n\n" if len(ocr_text) > 300 else f"_{ocr_text}_\n\n"
+        response += f"📝 Text: _{ocr_text[:150]}..._\n\n" if len(ocr_text) > 150 else f"📝 Text: _{ocr_text}_\n\n"
         
-        # Content fact-check
-        if word_count >= 10 and content_explanation:
-            content_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
-            response += f"{content_emoji} **Text Content Verdict:** {content_verdict}\n"
-            response += f"Confidence: {content_confidence:.0%}\n"
-            response += f"_{content_explanation[:250]}_\n\n"
-    
-    response += "💡 _Tap 'View Detailed Report' for complete analysis_"
+        if len(ocr_text.split()) >= 10:
+            verdict_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
+            response += f"{verdict_emoji} Content: **{content_verdict}** ({content_confidence:.0%})\n"
     
     return response
 
 
 def format_video_result(result: dict) -> str:
-    """Format video analysis result for Telegram."""
+    """Format video analysis result for Telegram - concise version."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
-    deepfake_result = media_analysis.get('deepfake_result', {})
+    deepfake_result = media_analysis.get('video_deepfake', {}) or media_analysis.get('deepfake_result', {})
     
     is_deepfake = deepfake_result.get('is_deepfake', False)
-    confidence = deepfake_result.get('confidence', 0)
+    confidence = deepfake_result.get('confidence', 0.0)
     
     emoji = '❌' if is_deepfake else '✅'
-    status = 'DEEPFAKE DETECTED' if is_deepfake else 'AUTHENTIC'
+    status = 'DEEPFAKE' if is_deepfake else 'AUTHENTIC'
     
-    response = f"**{emoji} Video Analysis**\n\n"
-    response += f"**Status:** {status}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
-    
-    if deepfake_result.get('analysis'):
-        response += f"**Details:** {deepfake_result['analysis']}\n"
-    
-    response += f"\n💡 _Tap 'View Detailed Report' for full analysis_"
+    response = f"🎥 {emoji} **{status}** ({confidence:.0%})\n"
     
     return response
 
 
 def format_audio_result(result: dict) -> str:
-    """Format audio analysis result for Telegram with full context (API server logic)."""
-    # Extract analysis data
+    """Format audio analysis result for Telegram - concise version."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
     fact_check = result.get('stages', {}).get('fact_check', {})
     
-    # Audio deepfake detection
     audio_deepfake = media_analysis.get('audio_deepfake', {})
     is_ai_voice = audio_deepfake.get('is_deepfake', False)
     voice_confidence = audio_deepfake.get('confidence', 0.0)
-    voice_explanation = audio_deepfake.get('explanation', 'No analysis available')
     
-    # Transcription
     transcription_data = media_analysis.get('transcription', {})
     transcribed_text = transcription_data.get('transcribed_text', '')
     
-    # Content fact-check (if transcription was analyzed)
     content_verdict = fact_check.get('verdict', 'UNCERTAIN')
     content_confidence = fact_check.get('confidence', 0.0)
-    content_explanation = fact_check.get('explanation', '')
     
-    # Build response
     emoji = '❌' if is_ai_voice else '✅'
-    status = 'AI VOICE CLONE DETECTED' if is_ai_voice else 'AUTHENTIC HUMAN VOICE'
+    status = 'AI VOICE' if is_ai_voice else 'AUTHENTIC'
     
-    response = f"**{emoji} AUDIO ANALYSIS REPORT**\n\n"
+    response = f"🎙️ {emoji} **{status}** ({voice_confidence:.0%})\n\n"
     
-    # Overall assessment
-    if is_ai_voice and content_verdict == 'FALSE':
-        response += "⚠️ **DOUBLE ALERT:** AI voice AND false claims detected!\n\n"
-    elif is_ai_voice and content_verdict == 'TRUE':
-        response += "⚠️ **MIXED RESULT:** AI voice but claims are TRUE.\n\n"
-    elif is_ai_voice:
-        response += "⚠️ **AI VOICE DETECTED:** Voice authenticity questionable.\n\n"
-    elif content_verdict == 'FALSE':
-        response += "❌ **FALSE CONTENT:** Voice is real but claims are FALSE.\n\n"
-    else:
-        response += "✅ **VERIFIED:** Voice appears authentic.\n\n"
-    
-    # Voice authenticity
-    response += f"🎙️ **Voice Authenticity:**\n"
-    response += f"Status: {status}\n"
-    response += f"Confidence: {voice_confidence:.0%}\n"
-    response += f"_{voice_explanation[:200]}_\n\n"
-    
-    # Transcription
     if transcribed_text:
-        word_count = len(transcribed_text.split())
-        response += f"📝 **Transcription:** ({word_count} words)\n"
-        response += f"_{transcribed_text[:400]}..._\n\n" if len(transcribed_text) > 400 else f"_{transcribed_text}_\n\n"
+        response += f"📝 _{transcribed_text[:200]}..._\n\n" if len(transcribed_text) > 200 else f"📝 _{transcribed_text}_\n\n"
         
-        # Content fact-check
-        if word_count >= 10 and content_explanation:
-            content_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
-            response += f"{content_emoji} **Content Verdict:** {content_verdict}\n"
-            response += f"Confidence: {content_confidence:.0%}\n"
-            response += f"_{content_explanation[:250]}_\n\n"
-    
-    response += "💡 _Tap 'View Detailed Report' for complete analysis_"
+        if len(transcribed_text.split()) >= 10:
+            verdict_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
+            response += f"{verdict_emoji} Content: **{content_verdict}** ({content_confidence:.0%})\n"
     
     return response
 
