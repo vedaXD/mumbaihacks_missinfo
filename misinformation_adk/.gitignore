@@ -23,25 +23,92 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+ENV/
+env/
+.venv
+env.bak/
+venv.bak/
 
 # Environment variables
 .env
 .env.local
+.env.*.local
+*.env
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
 
 # OS
 .DS_Store
 Thumbs.db
+*.bak
+*~
 
 # Logs
 *.log
 logs/
+debug_output.txt
+debug.log
 
 # API keys and secrets
 config/secrets.json
+config/api_keys.json
 *.key
+*.pem
+*.cert
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/*.json
+!data/claims_db.json
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Chrome Extension (development files)
+chrome_extension/.crx
+chrome_extension/.pem
+chrome_extension/node_modules/
+
+# Model files (if using local ML models)
+*.pkl
+*.h5
+*.pt
+*.pth
+*.onnx
+models/
+checkpoints/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Audio/Video processing cache
+audio_cache/
+video_cache/
+*.wav.tmp
+*.mp4.tmp
