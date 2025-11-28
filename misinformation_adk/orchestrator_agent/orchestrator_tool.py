@@ -225,6 +225,7 @@ class OrchestratorTool(BaseTool):
     def _fact_check(self, claim: str, previous_stages: dict) -> dict:
         """Stage 3: Multi-source fact-checking with temporal verification."""
         from sub_agents.fact_check_agent.gemini_fact_checker_tool import GeminiFactCheckerTool
+        from sub_agents.fact_check_agent.google_news_tool import GoogleNewsTool
         from sub_agents.fact_check_agent.web_search_tool import WebSearchTool
         from sub_agents.fact_check_agent.reddit_search_tool import RedditSearchTool
         from sub_agents.fact_check_agent.twitter_scraper_tool import TwitterScraperTool
@@ -261,8 +262,14 @@ class OrchestratorTool(BaseTool):
             )
             return result
         
-        # Run Gemini fact-checking with web grounding for real-time verification
-        print("  → Running comprehensive web search (20+ sources)...")
+        # First check Google News for recent articles from trusted sources
+        print("  → Searching Google News for verified articles...")
+        news_tool = GoogleNewsTool()
+        news_result = news_tool.run(query=claim, num_results=15)
+        result["news_articles_found"] = news_result.get('total_articles', 0)
+        
+        # Then run comprehensive web search
+        print("  → Running comprehensive web search (30 sources)...")
         web_tool = WebSearchTool()
         web_result = web_tool.run(query=claim, num_results=30)  # Get more results for better context
         
@@ -276,8 +283,16 @@ class OrchestratorTool(BaseTool):
         twitter_tool = TwitterScraperTool()
         twitter_result = twitter_tool.run(query=claim, max_results=15)
         
+        # Prepare news context for Gemini (prioritize credible news)
+        news_context = ""
+        credible_news = news_result.get('credible_news', [])
+        if credible_news:
+            news_context = f"\\n\\nGOOGLE NEWS ARTICLES ({len(credible_news)} trusted sources):\\n"
+            for idx, article in enumerate(credible_news[:8], 1):
+                news_context += f"{idx}. [{article.get('source', 'N/A')}] {article.get('title', 'N/A')}\\n   {article.get('snippet', 'N/A')}\\n"
+        
         # Prepare web context for Gemini
-        web_context = f"\\n\\nREAL-TIME WEB SEARCH RESULTS ({len(web_result.get('results', []))} sources found):\\n"
+        web_context = f"\\n\\nWEB SEARCH RESULTS ({len(web_result.get('results', []))} sources):\\n"
         for idx, result in enumerate(web_result.get('results', [])[:10], 1):
             web_context += f"{idx}. {result.get('title', 'N/A')} - {result.get('snippet', 'N/A')}\\n"
         
@@ -307,12 +322,13 @@ class OrchestratorTool(BaseTool):
         print("  → Running Gemini AI analysis with real-time web + social media data...")
         gemini_tool = GeminiFactCheckerTool()
         
-        # Add context from media analysis, web search AND social media (Reddit + Twitter)
+        # Add context from media analysis, Google News, web search AND social media
         full_context = ""
         if media_analysis:
             full_context = f"Media type: {media_analysis.get('media_type')}. "
             if media_analysis.get("extracted_text"):
                 full_context += f"Extracted text: {media_analysis.get('extracted_text')}"
+        full_context += news_context  # Add Google News articles (most credible)
         full_context += web_context  # Add web search results
         full_context += social_media_context  # Add Reddit + Twitter perspectives
         
