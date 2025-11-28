@@ -1,10 +1,16 @@
 from google.adk.agents.llm_agent import Agent
-from ..tools.misinformation_detection_tool import MisinformationDetectionTool
+from .pattern_detector_tool import PatternDetectorTool
+from .deepfake_detector_tool import DeepfakeDetectorTool
+from .clickbait_detector_tool import ClickbaitDetectorTool
 
 root_agent = Agent(
     model='gemini-2.5-flash',
     name='misinformation_detection_agent',
-    description='An agent that detects misinformation, fake news, and misleading content.',
-    instruction='Detect misinformation patterns using the detect_misinformation tool. Identify fake news, deepfakes, manipulated media, and misleading narratives.',
-    tools=[MisinformationDetectionTool()],
+    description='Multi-method misinformation detection agent that identifies fake news patterns, deepfakes, and clickbait.',
+    instruction='Detect misinformation using pattern recognition, deepfake detection, and clickbait identification. Provide detailed analysis of manipulation techniques and content authenticity.',
+    tools=[
+        PatternDetectorTool(),
+        DeepfakeDetectorTool(),
+        ClickbaitDetectorTool()
+    ],
 )
