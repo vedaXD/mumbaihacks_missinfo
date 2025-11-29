@@ -516,6 +516,10 @@ def format_image_result(result: dict) -> str:
     
     response = f"🖼️ {emoji} **{status}** ({deepfake_confidence:.0%})\n\n"
     
+    # Show Grad-CAM availability for deepfakes
+    if is_deepfake and image_deepfake.get('gradcam_visualization'):
+        response += "🎯 _Grad-CAM heatmap generated (see report)_\n"
+    
     # Show OCR method (Qwen Vision is better)
     if ocr_text and ocr_method == 'qwen-vision':
         response += "🤖 _Advanced Vision AI used_\n"

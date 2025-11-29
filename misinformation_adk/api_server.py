@@ -711,6 +711,28 @@ def generate_media_html_report(report: dict) -> str:
                     </div>
                     <div class="confidence">Confidence: {deepfake_confidence:.1f}%</div>
                     <p class="explanation">{deepfake_explanation}</p>
+                    
+                    {f'''
+                    <!-- Grad-CAM Visualization -->
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.5); border-radius: 12px; border: 2px solid {deepfake_color}30;">
+                        <h3 style="color: {deepfake_color}; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <span>🎯</span> AI Focus Areas (Grad-CAM Visualization)
+                        </h3>
+                        <p style="color: #4a3826; font-size: 14px; margin-bottom: 15px; line-height: 1.6;">
+                            The heatmap below shows which regions of the image the AI model focused on when detecting deepfake patterns. 
+                            <strong style="color: {deepfake_color};">Red/warm areas</strong> indicate regions with suspicious artifacts, 
+                            while <strong style="color: #10b981;">blue/cool areas</strong> appear more natural.
+                        </p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <img src="data:image/png;base64,{deepfake.get('gradcam_visualization', '')}" 
+                                 alt="Grad-CAM Heatmap" 
+                                 style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                        </div>
+                        <p style="color: #8b5c40; font-size: 13px; margin-top: 12px; text-align: center; font-style: italic;">
+                            Visualization generated using Gradient-weighted Class Activation Mapping (Grad-CAM)
+                        </p>
+                    </div>
+                    ''' if is_deepfake and deepfake.get('gradcam_visualization') else ''}
                 </div>
                 
                 <!-- Content Fact-Check -->

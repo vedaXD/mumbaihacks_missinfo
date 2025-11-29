@@ -457,6 +457,23 @@ function displayMediaResult(result) {
             `;
         }
         
+        // Add Grad-CAM visualization if available (only for deepfakes)
+        if (isDeepfake && deepfake_analysis.gradcam_visualization) {
+            html += `
+                <div class="gradcam-section" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 8px; border: 2px solid #ef444430;">
+                    <h5 style="color: #ef4444; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                        <span>🎯</span> AI Focus Areas
+                    </h5>
+                    <p style="font-size: 12px; color: #4b5563; margin-bottom: 10px; line-height: 1.4;">
+                        Heatmap shows where the AI detected suspicious patterns. <strong style="color: #ef4444;">Red areas</strong> = artifacts detected.
+                    </p>
+                    <img src="data:image/png;base64,${deepfake_analysis.gradcam_visualization}" 
+                         alt="Grad-CAM Heatmap" 
+                         style="width: 100%; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                </div>
+            `;
+        }
+        
         deepfakeDiv.innerHTML = html;
         resultDiv.appendChild(deepfakeDiv);
     }

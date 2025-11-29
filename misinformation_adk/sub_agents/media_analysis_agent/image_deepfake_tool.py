@@ -1,17 +1,20 @@
 from google.adk.tools.base_tool import BaseTool
 import torch
+import torch.nn.functional as F
 from torchvision import transforms
 from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
 from PIL import Image
 import io
 import base64
 import os
+import numpy as np
+import cv2
 
 class ImageDeepfakeTool(BaseTool):
     def __init__(self):
         super().__init__(
             name="detect_image_deepfake",
-            description="Detects if an image is AI-generated or manipulated using custom-trained EfficientNet model."
+            description="Detects if an image is AI-generated or manipulated using custom-trained EfficientNet model with Grad-CAM visualization."
         )
         # Load custom trained EfficientNet model
         try:
@@ -31,6 +34,11 @@ class ImageDeepfakeTool(BaseTool):
             self.model.load_state_dict(torch.load(model_path, map_location="cpu"))
             self.model.eval()
             
+            # Store target layer for Grad-CAM (last convolutional layer before classifier)
+            self.target_layer = self.model.features[-1]
+            self.gradients = None
+            self.activations = None
+            
             # Define image preprocessing
             self.transform = transforms.Compose([
                 transforms.Resize((224, 224)),
@@ -45,6 +53,85 @@ class ImageDeepfakeTool(BaseTool):
             print("   Continuing with fallback detection...")
             self.model = None
             self.transform = None
+    
+    def _save_gradient(self, grad):
+        """Hook to save gradients during backward pass"""
+        self.gradients = grad
+    
+    def _save_activation(self, module, input, output):
+        """Hook to save activations during forward pass"""
+        self.activations = output
+    
+    def _generate_gradcam(self, input_tensor, target_class):
+        """Generate Grad-CAM heatmap"""
+        # Register hooks
+        handle_forward = self.target_layer.register_forward_hook(self._save_activation)
+        
+        # Forward pass
+        output = self.model(input_tensor)
+        
+        # Get the score for target class
+        target_score = output[0, target_class]
+        
+        # Backward pass
+        self.model.zero_grad()
+        target_score.backward()
+        
+        # Get gradients from the hook
+        handle_backward = self.activations.register_hook(self._save_gradient)
+        target_score.backward(retain_graph=True)
+        
+        # Calculate weights
+        gradients = self.gradients.detach()
+        activations = self.activations.detach()
+        
+        # Global average pooling
+        weights = torch.mean(gradients, dim=(2, 3), keepdim=True)
+        
+        # Weighted combination
+        cam = torch.sum(weights * activations, dim=1, keepdim=True)
+        
+        # ReLU
+        cam = F.relu(cam)
+        
+        # Normalize
+        cam = cam - cam.min()
+        if cam.max() > 0:
+            cam = cam / cam.max()
+        
+        # Remove hooks
+        handle_forward.remove()
+        handle_backward.remove()
+        
+        # Resize to input size
+        cam = F.interpolate(cam, size=(224, 224), mode='bilinear', align_corners=False)
+        cam = cam.squeeze().cpu().numpy()
+        
+        return cam
+    
+    def _apply_gradcam_overlay(self, original_img, heatmap):
+        """Apply Grad-CAM heatmap as overlay on original image"""
+        # Resize original image to 224x224
+        img_resized = original_img.resize((224, 224))
+        img_array = np.array(img_resized)
+        
+        # Convert heatmap to colormap
+        heatmap_uint8 = (heatmap * 255).astype(np.uint8)
+        heatmap_colored = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
+        heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)
+        
+        # Overlay
+        overlay = (0.6 * img_array + 0.4 * heatmap_colored).astype(np.uint8)
+        
+        # Convert to PIL Image
+        overlay_img = Image.fromarray(overlay)
+        
+        # Convert to base64
+        buffer = io.BytesIO()
+        overlay_img.save(buffer, format='PNG')
+        img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        
+        return img_base64
     
     def run(self, image_path: str = None, image_data: str = None) -> dict:
         """
@@ -74,6 +161,7 @@ class ImageDeepfakeTool(BaseTool):
             # Initialize variables
             real_prob = None
             fake_prob = None
+            gradcam_base64 = None
             
             # Run detection with custom EfficientNet model
             if self.model and self.transform:
@@ -93,6 +181,23 @@ class ImageDeepfakeTool(BaseTool):
                 # Determine result (class 0 = REAL, class 1 = FAKE)
                 is_deepfake = predicted_class == 1
                 confidence = fake_prob if is_deepfake else real_prob
+                
+                # Generate Grad-CAM visualization if deepfake detected
+                try:
+                    if is_deepfake:
+                        print(f"   Generating Grad-CAM visualization...")
+                        input_tensor_grad = self.transform(img).unsqueeze(0)
+                        input_tensor_grad.requires_grad = True
+                        
+                        # Generate heatmap for the predicted class (FAKE=1)
+                        heatmap = self._generate_gradcam(input_tensor_grad, predicted_class)
+                        
+                        # Apply overlay
+                        gradcam_base64 = self._apply_gradcam_overlay(img, heatmap)
+                        print(f"   ✓ Grad-CAM visualization generated")
+                except Exception as e:
+                    print(f"   Warning: Could not generate Grad-CAM: {e}")
+                    gradcam_base64 = None
                 
                 # Print results
                 print(f"   [DEEPFAKE DETECTION]")
@@ -114,7 +219,7 @@ class ImageDeepfakeTool(BaseTool):
                 is_deepfake = False
                 explanation = "Deepfake model not loaded. Unable to perform detailed analysis."
             
-            return {
+            result = {
                 "is_manipulated": is_deepfake,
                 "is_deepfake": is_deepfake,  # For backward compatibility
                 "confidence": confidence,
@@ -127,6 +232,12 @@ class ImageDeepfakeTool(BaseTool):
                 },
                 "model_loaded": self.model is not None
             }
+            
+            # Add Grad-CAM if available
+            if gradcam_base64:
+                result["gradcam_visualization"] = gradcam_base64
+            
+            return result
             
         except Exception as e:
             return {
