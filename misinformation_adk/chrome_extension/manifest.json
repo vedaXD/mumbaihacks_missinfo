@@ -9,7 +9,8 @@
     "contextMenus",
     "scripting",
     "notifications",
-    "alarms"
+    "alarms",
+    "tabs"
   ],
   "host_permissions": [
     "http://localhost:8000/*",

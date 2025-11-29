@@ -58,7 +58,16 @@ npm run dev
 - **News Reels Generator**: Click "🎬 News Reels Generator" to open the automated news reel website
 
 #### 2. **Image Analysis Tab** 🖼️
-- **Upload Image**: Click to upload or drag-and-drop an image
+- **Capture Screenshot**: Click "✂️ Capture Screenshot" to use the snipping tool
+  - **Interactive Selection**: Click and drag to select any area of the screen
+  - **Visual Feedback**: See your selection with a blue dashed border
+  - **Cancel Anytime**: Press ESC to cancel the selection
+  - Automatically captures only the selected portion
+  - Works just like Windows Snipping Tool!
+  
+- **Upload Image**: Click "📁 Upload Image" to upload from your computer
+  - Or drag-and-drop an image file
+  
 - **Analyze**: Automatically checks for:
   - Deepfake detection
   - Image manipulation

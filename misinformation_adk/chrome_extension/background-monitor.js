@@ -36,6 +36,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendResponse({ stats: result.stats || monitoringStats });
         });
         return true; // Keep channel open for async response
+    } else if (request.action === 'captureArea') {
+        // Capture screenshot and crop to selected area
+        handleAreaCapture(request.area, sender.tab.id, sendResponse);
+        return true; // Keep channel open for async response
+    } else if (request.action === 'screenshotCancelled') {
+        sendResponse({ cancelled: true });
     }
 });
 
@@ -301,3 +307,54 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 console.log('[Parent Mode Background] Service worker initialized');
+
+// Handle area screenshot capture and cropping
+async function handleAreaCapture(area, tabId, sendResponse) {
+    try {
+        // Capture the entire visible tab
+        const dataUrl = await chrome.tabs.captureVisibleTab(null, { format: 'png' });
+        
+        // Create an image to crop
+        const img = new Image();
+        img.onload = () => {
+            // Create canvas for cropping
+            const canvas = new OffscreenCanvas(
+                Math.floor(area.width * area.devicePixelRatio),
+                Math.floor(area.height * area.devicePixelRatio)
+            );
+            const ctx = canvas.getContext('2d');
+            
+            // Draw the cropped portion
+            ctx.drawImage(
+                img,
+                area.x * area.devicePixelRatio,
+                area.y * area.devicePixelRatio,
+                area.width * area.devicePixelRatio,
+                area.height * area.devicePixelRatio,
+                0,
+                0,
+                area.width * area.devicePixelRatio,
+                area.height * area.devicePixelRatio
+            );
+            
+            // Convert to blob and then to data URL
+            canvas.convertToBlob({ type: 'image/png' }).then(blob => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    // Send cropped image back to popup
+                    chrome.runtime.sendMessage({
+                        action: 'screenshotCaptured',
+                        dataUrl: reader.result,
+                        size: blob.size
+                    });
+                    sendResponse({ success: true });
+                };
+                reader.readAsDataURL(blob);
+            });
+        };
+        img.src = dataUrl;
+    } catch (error) {
+        console.error('Screenshot capture failed:', error);
+        sendResponse({ success: false, error: error.message });
+    }
+}
