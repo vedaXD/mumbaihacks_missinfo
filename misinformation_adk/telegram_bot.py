@@ -14,7 +14,7 @@ from telegram.constants import ParseMode
 # Import your existing backend
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from orchestrator_agent.orchestrator_tool import OrchestratorTool
+from orchestrator_agent_reel.orchestrator_tool import OrchestratorTool
 
 # Load environment variables
 load_dotenv()
