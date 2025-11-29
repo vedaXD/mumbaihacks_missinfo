@@ -1,0 +1,21 @@
+{
+  "media_type": "image",
+  "filename": "deepfake 1.png",
+  "deepfake_analysis": {
+    "is_deepfake": false,
+    "confidence": 0.0,
+    "explanation": "Analysis not available",
+    "technical_details": {}
+  },
+  "content_analysis": {
+    "verdict": "UNCERTAIN",
+    "confidence": 0.5,
+    "summary": "",
+    "explanation": "",
+    "sources": []
+  },
+  "overall_verdict": "❓ UNCERTAIN: Unable to definitively verify media authenticity or content accuracy.",
+  "timestamp": "2025-11-29T04:40:45.437315",
+  "report_id": "9bc1e67eb63a2f19318f1ed179d2c202",
+  "generated_at": "2025-11-29T04:40:45.437427"
+}

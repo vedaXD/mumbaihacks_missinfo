@@ -420,19 +420,44 @@ function displayMediaResult(result) {
     // Deepfake Analysis Section
     if (deepfake_analysis) {
         const deepfakeDiv = document.createElement('div');
-        deepfakeDiv.className = 'deepfake-result';
-        
         const isDeepfake = deepfake_analysis.is_deepfake;
         const confidence = (deepfake_analysis.confidence * 100).toFixed(1);
         
-        deepfakeDiv.innerHTML = `
+        // Add appropriate class based on result
+        if (isDeepfake) {
+            deepfakeDiv.className = 'deepfake-result fake';
+        } else {
+            deepfakeDiv.className = 'deepfake-result authentic';
+        }
+        
+        // Build HTML with confidence bar
+        let html = `
             <h4>
                 ${isDeepfake ? '⚠️ Deepfake Detected' : '✅ Authentic Media'}
             </h4>
-            <p><strong>Confidence:</strong> ${confidence}%</p>
+            <div class="confidence-label">
+                <span>Confidence</span>
+                <span>${confidence}%</span>
+            </div>
+            <div class="confidence-bar-container">
+                <div class="confidence-bar" style="width: ${confidence}%"></div>
+            </div>
             <p>${deepfake_analysis.explanation || ''}</p>
         `;
         
+        // Add technical details if available
+        if (deepfake_analysis.technical_details) {
+            const details = deepfake_analysis.technical_details;
+            html += `
+                <div class="technical-details">
+                    <strong>🔬 Technical Analysis:</strong>
+                    ${details.real_probability ? `<div>Real: ${(details.real_probability * 100).toFixed(1)}%</div>` : ''}
+                    ${details.fake_probability ? `<div>Fake: ${(details.fake_probability * 100).toFixed(1)}%</div>` : ''}
+                </div>
+            `;
+        }
+        
+        deepfakeDiv.innerHTML = html;
         resultDiv.appendChild(deepfakeDiv);
     }
     
@@ -453,14 +478,31 @@ function displayMediaResult(result) {
         
         const icon = verdictIcons[verdict] || '❓';
         
-        contentDiv.innerHTML = `
+        let html = `
             <h4>
                 ${icon} Content: ${verdict.replace('_', ' ')}
             </h4>
-            <p><strong>Confidence:</strong> ${confidence}%</p>
+            <div class="confidence-label">
+                <span>Confidence</span>
+                <span>${confidence}%</span>
+            </div>
+            <div class="confidence-bar-container">
+                <div class="confidence-bar" style="width: ${confidence}%"></div>
+            </div>
             <p>${content_analysis.summary || content_analysis.explanation || ''}</p>
         `;
         
+        // Add OCR text if available
+        if (content_analysis.ocr_text && content_analysis.ocr_text.trim()) {
+            html += `
+                <div class="ocr-section">
+                    <h5>📝 Extracted Text</h5>
+                    <div class="ocr-text">${content_analysis.ocr_text}</div>
+                </div>
+            `;
+        }
+        
+        contentDiv.innerHTML = html;
         resultDiv.appendChild(contentDiv);
     }
     

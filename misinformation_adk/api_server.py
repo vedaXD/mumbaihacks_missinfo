@@ -203,9 +203,10 @@ async def analyze_media(
             content_type=media_type
         )
         
-        # Extract deepfake and fact-check results
-        deepfake_analysis = result.get('media_analysis', {})
-        fact_check = result.get('fact_check', {})
+        # Extract deepfake and fact-check results (correct path from orchestrator)
+        stages = result.get('stages', {})
+        deepfake_analysis = stages.get('media_analysis', {})
+        fact_check = stages.get('fact_check', {})
         
         # Determine overall verdict
         is_deepfake = False
@@ -213,7 +214,7 @@ async def analyze_media(
         
         if media_type == 'image':
             deepfake_data = deepfake_analysis.get('image_deepfake', {})
-            is_deepfake = deepfake_data.get('is_manipulated', False)
+            is_deepfake = deepfake_data.get('is_manipulated', False) or deepfake_data.get('is_deepfake', False)
         elif media_type == 'video':
             deepfake_data = deepfake_analysis.get('video_deepfake', {})
             is_deepfake = deepfake_data.get('is_deepfake', False)
@@ -225,6 +226,10 @@ async def analyze_media(
         
         content_verdict = fact_check.get('verdict', 'UNCERTAIN')
         content_confidence = fact_check.get('confidence', 0.5)
+        
+        # Debug print to verify extraction
+        print(f"[DEBUG] Extracted deepfake status: is_deepfake={is_deepfake}, confidence={deepfake_data.get('confidence', 0.0)}")
+        print(f"[DEBUG] Content verdict: {content_verdict}, confidence={content_confidence}")
         
         # Create overall verdict message
         if is_deepfake and content_verdict == 'FALSE':
@@ -451,118 +456,241 @@ def generate_media_html_report(report: dict) -> str:
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Media Analysis Report - {filename}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
         <style>
             * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+            
+            @keyframes fadeInUp {{
+                from {{ opacity: 0; transform: translateY(20px); }}
+                to {{ opacity: 1; transform: translateY(0); }}
+            }}
+            
+            @keyframes pulse {{
+                0%, 100% {{ transform: scale(1); }}
+                50% {{ transform: scale(1.05); }}
+            }}
+            
             body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: linear-gradient(135deg, #faf5f0 0%, #e8dfd6 100%);
                 min-height: 100vh;
                 padding: 40px 20px;
             }}
+            
+            .watermark {{
+                position: fixed;
+                top: 20px;
+                right: 30px;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 12px 24px;
+                border-radius: 50px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-weight: 600;
+                color: #6b4423;
+                font-size: 16px;
+                backdrop-filter: blur(10px);
+                z-index: 1000;
+            }}
+            
+            .watermark::before {{
+                content: '👁️';
+                font-size: 24px;
+                animation: pulse 2s infinite;
+            }}
+            
             .container {{
                 max-width: 900px;
                 margin: 0 auto;
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                background: #ffffff;
+                border-radius: 24px;
+                box-shadow: 0 25px 80px rgba(139, 92, 64, 0.15);
                 overflow: hidden;
+                animation: fadeInUp 0.6s ease-out;
             }}
             .header {{
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #8b5c40 0%, #6b4423 100%);
                 color: white;
-                padding: 40px;
+                padding: 50px 40px;
                 text-align: center;
+                position: relative;
+                overflow: hidden;
+            }}
+            .header::before {{
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+                animation: rotate 20s linear infinite;
+            }}
+            @keyframes rotate {{
+                from {{ transform: rotate(0deg); }}
+                to {{ transform: rotate(360deg); }}
             }}
             .header h1 {{
                 font-size: 32px;
                 margin-bottom: 10px;
+                position: relative;
+                z-index: 1;
+                font-weight: 700;
+                text-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }}
             .header p {{
                 font-size: 16px;
-                opacity: 0.9;
+                opacity: 0.95;
+                position: relative;
+                z-index: 1;
+                font-weight: 400;
             }}
             .content {{
-                padding: 40px;
+                padding: 45px;
+                background: #fefdfb;
             }}
             .section {{
-                margin-bottom: 40px;
-                padding: 30px;
-                border-radius: 12px;
+                margin-bottom: 35px;
+                padding: 28px;
+                border-radius: 16px;
                 border-left: 5px solid;
+                animation: fadeInUp 0.6s ease-out;
+                animation-fill-mode: both;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }}
+            .section:hover {{
+                transform: translateY(-2px);
+                box-shadow: 0 6px 25px rgba(139, 92, 64, 0.12);
             }}
             .deepfake-section {{
-                background: {deepfake_color}15;
+                background: linear-gradient(135deg, {deepfake_color}10 0%, {deepfake_color}05 100%);
                 border-color: {deepfake_color};
+                box-shadow: 0 4px 15px rgba(139, 92, 64, 0.08);
             }}
             .content-section {{
-                background: {content_color}15;
+                background: linear-gradient(135deg, {content_color}10 0%, {content_color}05 100%);
                 border-color: {content_color};
+                box-shadow: 0 4px 15px rgba(139, 92, 64, 0.08);
             }}
             .overall-section {{
-                background: #f9fafb;
-                border-color: #667eea;
+                background: linear-gradient(135deg, #faf8f5 0%, #f5f2ed 100%);
+                border-color: #d4a574;
+                box-shadow: 0 4px 15px rgba(139, 92, 64, 0.08);
             }}
             .section h2 {{
-                font-size: 24px;
-                margin-bottom: 20px;
+                font-size: 22px;
+                font-weight: 700;
+                color: #6b4423;
+                margin-bottom: 18px;
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                letter-spacing: -0.5px;
             }}
             .section h3 {{
                 font-size: 18px;
                 margin: 20px 0 10px;
-                color: #374151;
+                color: #6b4423;
+                font-weight: 600;
             }}
             .verdict-badge {{
                 display: inline-block;
-                padding: 8px 16px;
-                border-radius: 20px;
-                font-weight: 600;
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-weight: 700;
                 font-size: 14px;
                 margin-top: 10px;
+                letter-spacing: 0.5px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             }}
             .confidence {{
                 font-size: 16px;
-                color: #6b7280;
-                margin-top: 10px;
+                color: #8b5c40;
+                margin-top: 12px;
+                font-weight: 600;
             }}
             .explanation {{
                 line-height: 1.8;
-                color: #374151;
+                color: #4a3826;
                 margin-top: 15px;
+                font-size: 15px;
             }}
             .sources {{
                 list-style: none;
                 margin-top: 15px;
             }}
             .sources li {{
-                padding: 10px;
-                background: #f9fafb;
-                border-left: 3px solid #667eea;
-                margin-bottom: 8px;
-                border-radius: 4px;
+                padding: 14px 18px;
+                background: linear-gradient(135deg, #fff 0%, #faf8f5 100%);
+                border-left: 4px solid #d4a574;
+                margin-bottom: 10px;
+                border-radius: 10px;
                 font-size: 14px;
+                color: #4a3826;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            }}
+            .sources li:hover {{
+                transform: translateX(4px);
+                box-shadow: 0 4px 12px rgba(139, 92, 64, 0.12);
             }}
             .footer {{
-                padding: 30px 40px;
-                background: #f9fafb;
+                padding: 35px 40px;
+                background: linear-gradient(135deg, #faf8f5 0%, #f0ede8 100%);
                 text-align: center;
-                color: #6b7280;
+                color: #8b5c40;
                 font-size: 14px;
+                border-top: 2px solid #e8dfd6;
+            }}
+            .footer-brand {{
+                font-size: 20px;
+                font-weight: 700;
+                color: #6b4423;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
             }}
             .timestamp {{
-                color: #9ca3af;
+                color: #a67c52;
                 font-size: 13px;
+                margin-top: 5px;
+            }}
+            .copy-button {{
+                display: inline-block;
+                margin-top: 20px;
+                padding: 14px 32px;
+                background: linear-gradient(135deg, #8b5c40 0%, #6b4423 100%);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 6px 20px rgba(139, 92, 64, 0.3);
+            }}
+            .copy-button:hover {{
+                background: linear-gradient(135deg, #6b4423 0%, #5a3820 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 30px rgba(139, 92, 64, 0.4);
             }}
         </style>
     </head>
     <body>
+        <div class="watermark">
+            <span>Vishwas Netra</span>
+            <span style="font-size: 13px; color: #a67c52;">विश्वास नेत्र</span>
+        </div>
+        
         <div class="container">
             <div class="header">
                 <h1>🛡️ Media Analysis Report</h1>
                 <p>Deepfake Detection + Content Verification</p>
-                <p style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
+                <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
                     {media_type.upper()} • {filename}
                 </p>
             </div>
@@ -598,14 +726,31 @@ def generate_media_html_report(report: dict) -> str:
             </div>
             
             <div class="footer">
-                <p>🛡️ AI-Powered Misinformation Detection System</p>
-                <p class="timestamp">Generated: {timestamp}</p>
-                <p style="margin-top: 10px; font-size: 12px;">
+                <button class="copy-button" onclick="copyLink()">📋 Copy Share Link</button>
+                <div class="footer-brand" style="margin-top: 20px;">
+                    <span>👁️</span>
+                    <span>Vishwas Netra</span>
+                    <span style="color: #a67c52;">विश्वास नेत्र</span>
+                </div>
+                <p class="timestamp" style="margin-top: 10px;">Generated: {timestamp}</p>
+                <p style="margin-top: 12px; font-size: 12px; color: #a67c52; line-height: 1.6;">
                     This report combines deepfake detection with content fact-checking.<br>
                     Even if media is fake, the claims within may be true (or vice versa).
                 </p>
             </div>
         </div>
+        
+        <script>
+            function copyLink() {{
+                navigator.clipboard.writeText(window.location.href).then(() => {{
+                    const btn = document.querySelector('.copy-button');
+                    btn.textContent = '✅ Link Copied!';
+                    setTimeout(() => {{
+                        btn.textContent = '📋 Copy Share Link';
+                    }}, 2000);
+                }});
+            }}
+        </script>
     </body>
     </html>
     """

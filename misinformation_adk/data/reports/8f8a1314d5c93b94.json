@@ -1,0 +1,69 @@
+{
+  "user_input": "did modi say to demonitize 1000 rupees note",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T03:48:38.079315",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "Complete List of Demonetisation Date in India - ClearTax",
+      "url": "https://cleartax.in/s/demonetisation-date-list",
+      "snippet": "Apr 28, 2025 · Demonetisation in India refers to the process of invalidating certain currency notes as legal tender. The Reserve Bank of India (RBI) has played a key role in India's …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (20 posts in r/BORUpdates, BestofRedditorUpdates, TeenIndia): MIXED",
+      "verdict": "OUTDATED_INFO",
+      "confidence": 1.0,
+      "explanation": "The web search results confirm that Prime Minister Modi did announce the demonetization of 500 and 1000 rupee notes in November 2016. The BBC and The Diplomat articles directly support this. While the claim is true, it refers to an event that happened in the past and is not a current event as of November 29, 2025. The search results also include articles discussing the impact and history of demonetization in India.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/BORUpdates, BestofRedditorUpdates, TeenIndia): MIXED\n\n✓ Verified by 3 credible sources.\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "POLITICAL MANIPULATION",
+      "pattern_confidence": 0.7,
+      "context_card": {
+        "verdict_explanation": "This claim has been verified as TRUE",
+        "confidence_level": "100% confidence",
+        "reasoning": "Based on analysis of 10 web sources (3 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "✅",
+        "color": "green",
+        "why_this_verdict": "Multiple credible sources confirm this claim. Found 3 authoritative sources (news agencies, academic, government) that verify the information."
+      },
+      "temporal_status": "OUTDATED",
+      "time_verification": "The demonetization of 500 and 1000 rupee notes occurred in November 2016. The claim is about a past event, not a current one as of November 29, 2025.",
+      "key_evidence": [
+        "The Diplomat article states \"Modi: India’s Rs 500 and Rs 1,000 Notes No Longer Valid\" (date not specified in the provided snippet, but the event occurred in 2016).",
+        "The BBC article \"Why India wiped out 86% of its cash overnight\" refers to the 2016 demonetization."
+      ],
+      "sources": [
+        "BBC (date not specified in the provided snippet, but the event occurred in 2016)",
+        "The Diplomat – Asia-Pacific Current Affairs Magazine (date not specified in the provided snippet, but the event occurred in 2016)"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: POLITICAL MANIPULATION (70% confidence)",
+        "⚠️ This information is outdated. Old news presented as current."
+      ],
+      "web_sources_found": 10,
+      "credible_sources_found": 3,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "OUTDATED_INFO",
+  "confidence": 1.0,
+  "recommendations": [],
+  "report_id": "8f8a1314d5c93b94",
+  "generated_at": "2025-11-29T03:48:59.176707",
+  "original_content": "did modi say to demonitize 1000 rupees note"
+}

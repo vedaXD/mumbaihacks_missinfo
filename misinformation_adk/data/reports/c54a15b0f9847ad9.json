@@ -1,0 +1,71 @@
+{
+  "user_input": "did modi say soham is dumb",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T03:38:58.673913",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解读： …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (2 posts in r/youtubeindia, TMKOC): MIXED",
+      "verdict": "LIKELY_FALSE",
+      "confidence": 0.2,
+      "explanation": "The search results are largely irrelevant to the claim that Modi said \"Soham is dumb.\" The results focus on unrelated topics such as economics, DID models (Difference in Differences), and multiple personality disorder. The absence of any credible sources reporting on this alleged statement, especially given the high profile of the person involved, suggests that the claim is likely false. Real events of this nature would generate widespread coverage. The claim also fits a pattern of political manipulation, where false quotes are attributed to politicians.\n\n💡 Analysis: The absence of credible sources for such a significant claim strongly suggests it is false. Real events of this magnitude generate immediate, widespread, and verifiable coverage from multiple news outlets.\\n\\n🐦 Social Media Perspective: Reddit (2 posts in r/youtubeindia, TMKOC): MIXED\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "Political Manipulation",
+      "pattern_confidence": 0.6,
+      "context_card": {
+        "verdict_explanation": "This claim is LIKELY FALSE",
+        "confidence_level": "20% confidence",
+        "reasoning": "Based on analysis of 10 web sources (0 credible), 2 Reddit discussions, and 0 tweets.",
+        "icon": "⚠️",
+        "color": "orange-red",
+        "why_this_verdict": "No credible sources found to verify this claim. For significant events, the absence of coverage strongly suggests the claim is false."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is about a statement allegedly made by Modi. Without a specific date, it's difficult to determine when this might have occurred. The current date is November 29, 2025.",
+      "key_evidence": [
+        "The search results do not contain any articles or reports confirming the alleged statement.",
+        "The search results are largely irrelevant to the claim."
+      ],
+      "sources": [
+        "ThePrint (November 29, 2025) - Irrelevant article about Indian elections and the economy.",
+        "Various Zhihu articles (various dates) - Irrelevant articles about DID models and multiple personality disorder."
+      ],
+      "warnings": [
+        "⚠️ Search results were not relevant to the claim"
+      ],
+      "web_sources_found": 10,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "LIKELY_FALSE",
+  "confidence": 0.2,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "c54a15b0f9847ad9",
+  "generated_at": "2025-11-29T03:39:16.228931",
+  "original_content": "did modi say soham is dumb"
+}

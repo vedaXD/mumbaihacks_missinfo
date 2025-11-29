@@ -14,11 +14,17 @@ from telegram.constants import ParseMode
 # Import your existing backend
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from orchestrator_agent_reel.orchestrator_tool import OrchestratorTool
+from orchestrator_agent.orchestrator_tool import OrchestratorTool
+import re
+from typing import Optional
 
 # Load environment variables
 load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+# Base URL for reports (use ngrok/public URL in production, or None for local)
+# Telegram doesn't accept localhost URLs in inline keyboards
+BASE_URL = os.getenv('BASE_URL', None)  # Set BASE_URL in .env for production (e.g., https://your-domain.com)
 
 # Initialize orchestrator
 orchestrator = OrchestratorTool()
@@ -28,32 +34,75 @@ UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def extract_youtube_transcript(url: str) -> Optional[str]:
+    """Extract transcript from YouTube video"""
+    try:
+        from youtube_transcript_api import YouTubeTranscriptApi
+        
+        # Extract video ID
+        video_id = None
+        if "youtube.com/watch?v=" in url:
+            video_id = url.split("watch?v=")[1].split("&")[0]
+        elif "youtu.be/" in url:
+            video_id = url.split("youtu.be/")[1].split("?")[0]
+        
+        if not video_id:
+            return None
+        
+        # Get transcript
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript = " ".join([t['text'] for t in transcript_list])
+        
+        return transcript
+        
+    except Exception as e:
+        print(f"[YouTube] Transcript extraction failed: {e}")
+        return None
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send welcome message when /start is issued."""
     welcome_text = """
-🔍 **Welcome to Misinformation Detector Bot!**
+🛡️ **Welcome to Vishwas Netra Bot!**
 
-I'm like Grok on Twitter, but for Telegram. I can analyze:
+*विश्वास का नेत्र - Your Truth Guardian*
 
-📝 **Text** - Send me any claim to fact-check
-🖼️ **Images** - Check if AI-generated or deepfake
-🎥 **Videos** - Detect manipulated content
-🎵 **Audio** - Identify AI voice clones & transcribe
+I can analyze ANY content for misinformation:
 
-**How to use:**
-1. Send me text, image, video, or audio
-2. I'll analyze it using AI + web search + social media
-3. Get instant verdict with detailed report
+📝 **Text & YouTube URLs**
+   • Fact-check claims with 30+ web sources
+   • Extract & verify YouTube video transcripts
+   • Google News + Reddit + Twitter consensus
+   • Detect misinformation patterns
 
-**Features:**
-✅ Gemini AI fact-checking
-✅ Web search (15+ sources)
-✅ Twitter consensus
-✅ AI-generated media detection
-✅ OCR & transcription
-✅ Educational explanations
+🖼️ **Images** _(Enhanced with Qwen Vision AI)_
+   • AI-generated image detection (EfficientNet)
+   • Advanced text extraction (memes, infographics)
+   • Visual context understanding
+   • Claim detection from images
+   • Source verification
 
-Try sending me something to check! 🚀
+🎥 **Videos**
+   • Deepfake video detection (frame-by-frame)
+   • Custom AI model (96% accuracy)
+   • Content fact-checking
+
+🎵 **Audio & Voice Messages**
+   • AI voice clone detection
+   • Speech-to-text transcription
+   • Fact-check transcribed content
+
+**📊 What You Get:**
+✅ Verdict: TRUE/FALSE/MISLEADING
+✅ Confidence score (0-100%)
+✅ Detailed explanation
+✅ Source citations
+✅ Shareable HTML report
+
+**⚡ Quick Start:**
+Just send me something - I'll figure out what to do!
+
+*Powered by Gemini 2.0 + Advanced ML Models*
 """
     await update.message.reply_text(welcome_text, parse_mode=ParseMode.MARKDOWN)
 
@@ -62,29 +111,96 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle text messages for fact-checking."""
     text = update.message.text
     
-    # Send thinking message
-    thinking_msg = await update.message.reply_text("🔍 Analyzing your claim...\n⏳ This may take a few moments...")
+    # Ignore short messages
+    if len(text) < 10:
+        await update.message.reply_text("⚠️ Please send a longer claim (at least 10 characters) for fact-checking.")
+        return
+    
+    # Check if it's a YouTube URL
+    is_youtube = "youtube.com" in text or "youtu.be" in text
+    
+    if is_youtube:
+        # Send thinking message for YouTube
+        thinking_msg = await update.message.reply_text(
+            "🎥 **Analyzing YouTube Video...**\n\n"
+            "⏳ Step 1/3: Extracting transcript...\n"
+            "⏳ Step 2/3: Checking 30+ sources...\n"
+            "⏳ Step 3/3: Verifying claims...",
+            parse_mode=ParseMode.MARKDOWN
+        )
+    else:
+        # Send thinking message for text
+        thinking_msg = await update.message.reply_text(
+            "🔍 **Fact-Checking Your Claim...**\n\n"
+            "⏳ Step 1/3: Searching Google News...\n"
+            "⏳ Step 2/3: Checking 30+ web sources...\n"
+            "⏳ Step 3/3: Analyzing social media...",
+            parse_mode=ParseMode.MARKDOWN
+        )
     
     try:
-        # Run orchestrator
+        # Handle YouTube URLs
+        original_text = text
+        if is_youtube:
+            transcript = extract_youtube_transcript(text)
+            if transcript:
+                text = f"YouTube Video Transcript:\n{transcript}"
+            else:
+                await thinking_msg.edit_text(
+                    "❌ **Could not extract YouTube transcript**\n\n"
+                    "This might happen if:\n"
+                    "• Video has no captions/subtitles\n"
+                    "• Captions are disabled\n"
+                    "• Video is private/restricted\n\n"
+                    "Try sending the video title or description instead.",
+                    parse_mode=ParseMode.MARKDOWN
+                )
+                return
+        
+        # Run orchestrator (same as API server)
         result = orchestrator.run(
             user_input=text,
             content_type="text"
         )
         
-        # Format response
+        # Generate report ID and save (same as API server)
+        import hashlib
+        report_id = hashlib.md5(text.encode()).hexdigest()[:16]
+        
+        # Save report
+        from datetime import datetime
+        import json
+        report_data = {
+            **result,
+            'report_id': report_id,
+            'generated_at': datetime.now().isoformat(),
+            'original_content': text,
+            'youtube_url': original_text if is_youtube else None
+        }
+        
+        # Save to reports directory
+        REPORTS_DIR = Path("data/reports")
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(REPORTS_DIR / f"{report_id}.json", 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, indent=2, ensure_ascii=False)
+        
+        # Format response with detailed context (same as API server)
         response = format_text_result(result)
         
-        # Create inline keyboard for detailed report
+        # Add report link
         keyboard = None
-        if result.get('report_id'):
-            report_url = f"http://localhost:8000/report/{result['report_id']}"
-            keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-            ]])
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        # Delete thinking message and send result
-        await thinking_msg.delete()
+        # Try to delete thinking message, but don't fail if it's already gone
+        try:
+            await thinking_msg.delete()
+        except:
+            pass  # Message might already be deleted or too old
+        
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -93,13 +209,29 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing text: {str(e)}")
+        error_msg = f"❌ **Error Analyzing Text**\n\n"
+        error_msg += f"Details: {str(e)[:200]}\n\n"
+        error_msg += "💡 *Try:*\n"
+        error_msg += "• Simplifying your claim\n"
+        error_msg += "• Sending it again\n"
+        error_msg += "• Using /help for guidance"
+        try:
+            await thinking_msg.edit_text(error_msg, parse_mode=ParseMode.MARKDOWN)
+        except:
+            await update.message.reply_text(error_msg, parse_mode=ParseMode.MARKDOWN)
 
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle image messages for AI detection and OCR."""
-    # Send thinking message
-    thinking_msg = await update.message.reply_text("🖼️ Analyzing image...\n⏳ Running AI detection + OCR...")
+    # Send thinking message with progress
+    thinking_msg = await update.message.reply_text(
+        "🖼️ **Analyzing Image...**\n\n"
+        "⏳ Step 1/4: Detecting AI-generated content (EfficientNet)...\n"
+        "⏳ Step 2/4: Advanced text extraction (Qwen Vision)...\n"
+        "⏳ Step 3/4: Understanding visual context...\n"
+        "⏳ Step 4/4: Fact-checking content...",
+        parse_mode=ParseMode.MARKDOWN
+    )
     
     try:
         # Get largest photo size
@@ -110,26 +242,49 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         temp_path = UPLOAD_DIR / f"telegram_{photo.file_id}.jpg"
         await file.download_to_drive(temp_path)
         
-        # Run orchestrator
+        # Run orchestrator (same as API server)
         result = orchestrator.run(
-            user_input="Image analysis",
+            user_input="Analyze this image for deepfakes and verify content accuracy",
             file_path=str(temp_path),
             content_type="image"
         )
         
-        # Format response
+        # Generate report ID and save
+        import hashlib
+        from datetime import datetime
+        import json
+        report_id = hashlib.md5(f"{photo.file_id}{datetime.now().timestamp()}".encode()).hexdigest()[:16]
+        
+        # Save report
+        report_data = {
+            **result,
+            'report_id': report_id,
+            'generated_at': datetime.now().isoformat(),
+            'media_type': 'image',
+            'filename': f"telegram_{photo.file_id}.jpg"
+        }
+        
+        REPORTS_DIR = Path("data/reports")
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(REPORTS_DIR / f"{report_id}.json", 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, indent=2, ensure_ascii=False)
+        
+        # Format response with detailed context
         response = format_image_result(result)
         
-        # Create inline keyboard
+        # Add report link
         keyboard = None
-        if result.get('report_id'):
-            report_url = f"http://localhost:8000/report/{result['report_id']}"
-            keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-            ]])
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
         # Send result
-        await thinking_msg.delete()
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -141,7 +296,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing image: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing image: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing image: {str(e)}")
 
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -156,25 +314,48 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         temp_path = UPLOAD_DIR / f"telegram_{video.file_id}.mp4"
         await file.download_to_drive(temp_path)
         
-        # Run orchestrator
+        # Run orchestrator (same as API server)
         result = orchestrator.run(
-            user_input="Video analysis",
+            user_input="Analyze this video for deepfakes and verify content accuracy",
             file_path=str(temp_path),
             content_type="video"
         )
         
+        # Generate report ID and save
+        import hashlib
+        from datetime import datetime
+        import json
+        report_id = hashlib.md5(f"{video.file_id}{datetime.now().timestamp()}".encode()).hexdigest()[:16]
+        
+        report_data = {
+            **result,
+            'report_id': report_id,
+            'generated_at': datetime.now().isoformat(),
+            'media_type': 'video',
+            'filename': f"telegram_{video.file_id}.mp4"
+        }
+        
+        REPORTS_DIR = Path("data/reports")
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(REPORTS_DIR / f"{report_id}.json", 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, indent=2, ensure_ascii=False)
+        
         # Format response
         response = format_video_result(result)
         
-        # Create inline keyboard
+        # Add report link
         keyboard = None
-        if result.get('report_id'):
-            report_url = f"http://localhost:8000/report/{result['report_id']}"
-            keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-            ]])
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        await thinking_msg.delete()
+        # Try to delete thinking message
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -186,7 +367,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing video: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing video: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing video: {str(e)}")
 
 
 async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -196,7 +380,11 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     audio_obj = update.message.voice if is_voice else update.message.audio
     
     thinking_msg = await update.message.reply_text(
-        "🎵 Analyzing audio...\n⏳ Running AI voice detection + transcription..."
+        "🎵 **Analyzing Audio...**\n\n"
+        "⏳ Step 1/3: Detecting AI voice cloning...\n"
+        "⏳ Step 2/3: Transcribing speech...\n"
+        "⏳ Step 3/3: Fact-checking content...",
+        parse_mode=ParseMode.MARKDOWN
     )
     
     try:
@@ -207,25 +395,51 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         temp_path = UPLOAD_DIR / f"telegram_{audio_obj.file_id}{ext}"
         await file.download_to_drive(temp_path)
         
-        # Run orchestrator
+        # Run orchestrator (same as API server)
         result = orchestrator.run(
-            user_input="Audio analysis",
+            user_input="Analyze this audio for AI voice cloning and verify content accuracy",
             file_path=str(temp_path),
             content_type="audio"
         )
         
+        # Generate report ID and save
+        import hashlib
+        from datetime import datetime
+        import json
+        
+        audio_file = update.message.voice or update.message.audio
+        file_id = audio_file.file_id
+        report_id = hashlib.md5(f"{file_id}{datetime.now().timestamp()}".encode()).hexdigest()[:16]
+        
+        report_data = {
+            **result,
+            'report_id': report_id,
+            'generated_at': datetime.now().isoformat(),
+            'media_type': 'audio',
+            'filename': f"telegram_{file_id}.ogg"
+        }
+        
+        REPORTS_DIR = Path("data/reports")
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(REPORTS_DIR / f"{report_id}.json", 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, indent=2, ensure_ascii=False)
+        
         # Format response
         response = format_audio_result(result)
         
-        # Create inline keyboard
+        # Add report link
         keyboard = None
-        if result.get('report_id'):
-            report_url = f"http://localhost:8000/report/{result['report_id']}"
-            keyboard = InlineKeyboardMarkup([[
-                InlineKeyboardButton("📊 View Detailed Report", url=report_url)
-            ]])
+        if BASE_URL:
+            report_url = f"{BASE_URL}/report/{report_id}"
+            response += f"\n\n📊 Detailed Report:\n`{report_url}`"
+        else:
+            response += f"\n\n📊 Report: `http://localhost:8000/report/{report_id}`\n_(Start API server to view)_"
         
-        await thinking_msg.delete()
+        # Try to delete thinking message
+        try:
+            await thinking_msg.delete()
+        except:
+            pass
         await update.message.reply_text(
             response,
             parse_mode=ParseMode.MARKDOWN,
@@ -237,131 +451,137 @@ async def handle_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
             temp_path.unlink()
             
     except Exception as e:
-        await thinking_msg.edit_text(f"❌ Error analyzing audio: {str(e)}")
+        try:
+            await thinking_msg.edit_text(f"❌ Error analyzing audio: {str(e)}")
+        except:
+            await update.message.reply_text(f"❌ Error analyzing audio: {str(e)}")
 
 
 def format_text_result(result: dict) -> str:
-    """Format text fact-checking result for Telegram."""
-    verdict = result.get('verdict', 'UNCERTAIN')
-    confidence = result.get('confidence', 0)
+    """Format text fact-checking result for Telegram - concise version."""
+    fact_check = result.get("stages", {}).get("fact_check", {})
+    
+    verdict = fact_check.get("verdict", "UNCERTAIN")
+    confidence = fact_check.get("confidence", 0.0)
+    explanation = fact_check.get("explanation", "No explanation available.")
+    sources = fact_check.get("sources", [])
     
     # Emoji based on verdict
     emoji_map = {
         'TRUE': '✅',
         'FALSE': '❌',
-        'MISLEADING': '⚠️',
+        'PARTIALLY_TRUE': '⚠️',
         'UNCERTAIN': '🤔',
+        'OUTDATED_INFO': '⏰',
         'UNVERIFIABLE': '❓'
     }
     emoji = emoji_map.get(verdict, '🤔')
     
-    response = f"**{emoji} Fact-Check Result**\n\n"
-    response += f"**Verdict:** {verdict}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
+    # Build concise response
+    response = f"{emoji} **{verdict.replace('_', ' ')}** ({confidence:.0%} confidence)\n\n"
     
-    # Add explanation
-    if result.get('explanation'):
-        explanation = result['explanation'][:500]  # Limit length
-        response += f"**Analysis:**\n{explanation}\n\n"
+    # Short explanation (max 250 chars)
+    response += f"{explanation[:250]}{'...' if len(explanation) > 250 else ''}\n\n"
     
-    # Add sources count
-    fact_check = result.get('fact_check', {})
-    if fact_check.get('sources'):
-        source_count = len(fact_check['sources'])
-        response += f"📚 Checked against {source_count} sources\n"
-    
-    # Add Twitter consensus
-    if result.get('twitter_consensus'):
-        response += f"🐦 Social Media: {result['twitter_consensus']}\n"
-    
-    response += f"\n💡 _Tap 'View Detailed Report' for full analysis_"
+    # Sources summary
+    if sources:
+        response += f"📚 Sources: {', '.join(sources[:2])}{'...' if len(sources) > 2 else ''}\n"
     
     return response
 
 
 def format_image_result(result: dict) -> str:
-    """Format image analysis result for Telegram."""
+    """Format image analysis result for Telegram - concise version with Qwen Vision info."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
-    deepfake_result = media_analysis.get('deepfake_result', {})
+    fact_check = result.get('stages', {}).get('fact_check', {})
     
-    is_deepfake = deepfake_result.get('is_deepfake', False)
-    confidence = deepfake_result.get('confidence', 0)
+    image_deepfake = media_analysis.get('image_deepfake', {})
+    is_deepfake = image_deepfake.get('is_manipulated', False) or image_deepfake.get('is_deepfake', False)
+    deepfake_confidence = image_deepfake.get('confidence', 0.0)
+    
+    # Check for Qwen Vision analysis
+    qwen_analysis = media_analysis.get('qwen_vision_analysis', {})
+    ocr_data = media_analysis.get('ocr', {})
+    
+    # Prefer Qwen Vision text if available
+    ocr_text = qwen_analysis.get('extracted_text', '') or ocr_data.get('extracted_text', '')
+    ocr_method = qwen_analysis.get('method', ocr_data.get('method', 'unknown'))
+    
+    content_verdict = fact_check.get('verdict', 'UNCERTAIN')
+    content_confidence = fact_check.get('confidence', 0.0)
+    explanation = fact_check.get('explanation', '')
     
     emoji = '❌' if is_deepfake else '✅'
     status = 'AI-GENERATED' if is_deepfake else 'AUTHENTIC'
     
-    response = f"**{emoji} Image Analysis**\n\n"
-    response += f"**Status:** {status}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
+    response = f"🖼️ {emoji} **{status}** ({deepfake_confidence:.0%})\n\n"
     
-    # Add OCR text if available
-    ocr_text = deepfake_result.get('ocr_text', '')
+    # Show OCR method (Qwen Vision is better)
+    if ocr_text and ocr_method == 'qwen-vision':
+        response += "🤖 _Advanced Vision AI used_\n"
+    
+    # OCR text if available
     if ocr_text:
-        word_count = len(ocr_text.split())
-        response += f"**Extracted Text:** ({word_count} words)\n"
-        response += f"_{ocr_text[:200]}..._\n\n" if len(ocr_text) > 200 else f"_{ocr_text}_\n\n"
+        text_preview = ocr_text[:150] + "..." if len(ocr_text) > 150 else ocr_text
+        response += f"📝 Text: _{text_preview}_\n\n"
         
-        # Add fact-check if OCR had enough content
-        if word_count >= 10 and result.get('verdict'):
-            response += f"**Text Verdict:** {result['verdict']}\n"
-    
-    response += f"\n💡 _Tap 'View Detailed Report' for full analysis_"
+        if len(ocr_text.split()) >= 10:
+            verdict_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
+            response += f"{verdict_emoji} Content: **{content_verdict}** ({content_confidence:.0%})\n"
+            
+            # Add brief explanation
+            if explanation:
+                brief = explanation.split('.')[0] + '.'
+                brief = brief[:120] + "..." if len(brief) > 120 else brief
+                response += f"💡 _{brief}_\n"
+    else:
+        response += "📝 _No text detected in image_\n"
     
     return response
 
 
 def format_video_result(result: dict) -> str:
-    """Format video analysis result for Telegram."""
+    """Format video analysis result for Telegram - concise version."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
-    deepfake_result = media_analysis.get('deepfake_result', {})
+    deepfake_result = media_analysis.get('video_deepfake', {}) or media_analysis.get('deepfake_result', {})
     
     is_deepfake = deepfake_result.get('is_deepfake', False)
-    confidence = deepfake_result.get('confidence', 0)
+    confidence = deepfake_result.get('confidence', 0.0)
     
     emoji = '❌' if is_deepfake else '✅'
-    status = 'DEEPFAKE DETECTED' if is_deepfake else 'AUTHENTIC'
+    status = 'DEEPFAKE' if is_deepfake else 'AUTHENTIC'
     
-    response = f"**{emoji} Video Analysis**\n\n"
-    response += f"**Status:** {status}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
-    
-    if deepfake_result.get('analysis'):
-        response += f"**Details:** {deepfake_result['analysis']}\n"
-    
-    response += f"\n💡 _Tap 'View Detailed Report' for full analysis_"
+    response = f"🎥 {emoji} **{status}** ({confidence:.0%})\n"
     
     return response
 
 
 def format_audio_result(result: dict) -> str:
-    """Format audio analysis result for Telegram."""
+    """Format audio analysis result for Telegram - concise version."""
     media_analysis = result.get('stages', {}).get('media_analysis', {})
-    deepfake_result = media_analysis.get('deepfake_result', {})
+    fact_check = result.get('stages', {}).get('fact_check', {})
     
-    is_deepfake = deepfake_result.get('is_deepfake', False)
-    confidence = deepfake_result.get('confidence', 0)
+    audio_deepfake = media_analysis.get('audio_deepfake', {})
+    is_ai_voice = audio_deepfake.get('is_deepfake', False)
+    voice_confidence = audio_deepfake.get('confidence', 0.0)
     
-    emoji = '❌' if is_deepfake else '✅'
-    status = 'AI VOICE DETECTED' if is_deepfake else 'AUTHENTIC'
+    transcription_data = media_analysis.get('transcription', {})
+    transcribed_text = transcription_data.get('transcribed_text', '')
     
-    response = f"**{emoji} Audio Analysis**\n\n"
-    response += f"**Status:** {status}\n"
-    response += f"**Confidence:** {confidence:.0%}\n\n"
+    content_verdict = fact_check.get('verdict', 'UNCERTAIN')
+    content_confidence = fact_check.get('confidence', 0.0)
     
-    # Add transcription
-    transcribed_text = deepfake_result.get('transcribed_text', '')
+    emoji = '❌' if is_ai_voice else '✅'
+    status = 'AI VOICE' if is_ai_voice else 'AUTHENTIC'
+    
+    response = f"🎙️ {emoji} **{status}** ({voice_confidence:.0%})\n\n"
+    
     if transcribed_text:
-        word_count = len(transcribed_text.split())
-        response += f"**Transcription:** ({word_count} words)\n"
-        response += f"_{transcribed_text[:300]}..._\n\n" if len(transcribed_text) > 300 else f"_{transcribed_text}_\n\n"
+        response += f"📝 _{transcribed_text[:200]}..._\n\n" if len(transcribed_text) > 200 else f"📝 _{transcribed_text}_\n\n"
         
-        # Add fact-check if transcription had enough content
-        if word_count >= 10 and result.get('verdict'):
-            response += f"**Fact-Check Verdict:** {result['verdict']}\n"
-            if result.get('confidence'):
-                response += f"**Confidence:** {result['confidence']:.0%}\n"
-    
-    response += f"\n💡 _Tap 'View Detailed Report' for full analysis_"
+        if len(transcribed_text.split()) >= 10:
+            verdict_emoji = {'TRUE': '✅', 'FALSE': '❌', 'PARTIALLY_TRUE': '⚠️'}.get(content_verdict, '🤔')
+            response += f"{verdict_emoji} Content: **{content_verdict}** ({content_confidence:.0%})\n"
     
     return response
 
@@ -369,32 +589,62 @@ def format_audio_result(result: dict) -> str:
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send help message."""
     help_text = """
-🔍 **How to Use This Bot**
+🔍 **Vishwas Netra Bot - User Guide**
 
-**Send me:**
-📝 Text - Any claim you want fact-checked
-🖼️ Image - Check if AI-generated + extract text
-🎥 Video - Detect deepfakes and manipulation
-🎵 Audio/Voice - Detect AI voices + transcribe
+**📝 Text Fact-Checking**
+Send any claim:
+• "Modi banned 10 rupee notes"
+• "COVID vaccine contains microchips"
+• "Earth is flat"
 
-**What I check:**
-✅ AI-generated media detection
-✅ Gemini AI fact-checking
-✅ Web search across 15+ sources
-✅ Twitter/social media consensus
-✅ OCR text extraction
-✅ Audio transcription
-✅ Educational explanations
+I'll check 30+ sources and give you a verdict!
 
-**Commands:**
-/start - Show welcome message
-/help - Show this help message
+**🖼️ Image Analysis**
+Send any image:
+• Screenshots of viral posts
+• Forwarded images
+• Memes with text
 
-**Powered by:**
-🤖 Google Gemini AI
-🔍 Web Search
-🐦 Twitter API
-🎯 Custom ML models
+I'll detect AI-generation & extract text for fact-checking!
+
+**🎥 Video Analysis**
+Send videos up to 50MB:
+• Deepfake detection
+• Content verification
+• Frame analysis
+
+**🎵 Audio/Voice Analysis**
+Send audio or voice messages:
+• AI voice clone detection
+• Speech transcription
+• Fact-check spoken claims
+
+**📊 What You Get:**
+✅ Verdict (TRUE/FALSE/MISLEADING)
+✅ Confidence score
+✅ Detailed explanation
+✅ Multiple sources checked
+✅ Social media consensus
+✅ Shareable report link
+
+**⚡ Commands:**
+/start - Welcome message
+/help - This help message
+
+**🛠️ Tech Stack:**
+• Gemini 2.0 Flash Exp AI
+• Google News API
+• Reddit + Twitter analysis
+• Advanced ML models
+• 30+ web sources
+
+**💡 Tips:**
+• Longer claims = better analysis
+• Clear images work best
+• Audio quality matters
+• Wait for full analysis (10-30 sec)
+
+*Built with ❤️ for truth*
 """
     await update.message.reply_text(help_text, parse_mode=ParseMode.MARKDOWN)
 

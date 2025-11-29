@@ -1,0 +1,72 @@
+{
+  "user_input": "did modi say earth is flat",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T03:30:49.937393",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解读：含铅汽油与死亡 …",
+      "date": "2025-11-29",
+      "reddit_consensus": "LIKELY_FALSE",
+      "social_media_perspective": "Reddit (20 posts in r/HFY, BestofRedditorUpdates, CuratedTumblr): LIKELY_FALSE",
+      "verdict": "LIKELY_FALSE",
+      "confidence": 0.5599999999999999,
+      "explanation": "The search results are completely irrelevant to the claim that Modi said the earth is flat. The articles discuss Neil deGrasse Tyson, a rocket crash, and India's economic growth. The other web results discuss DID (Dissociative Identity Disorder) and econometric models. The absence of any credible sources for such a significant and easily verifiable claim strongly suggests it is false. A statement by a major political figure like Modi claiming the earth is flat would generate immediate and widespread coverage. The Reddit discussions also do not support the claim.\n\n💡 Analysis: The absence of credible sources for such a significant claim strongly suggests it is false. Real events of this magnitude generate immediate, widespread, and verifiable coverage from multiple news outlets.\\n\\n🐦 Social Media Perspective: Reddit (20 posts in r/HFY, BestofRedditorUpdates, CuratedTumblr): LIKELY_FALSE\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "Political Manipulation",
+      "pattern_confidence": 0.7,
+      "context_card": {
+        "verdict_explanation": "This claim is LIKELY FALSE",
+        "confidence_level": "56% confidence",
+        "reasoning": "Based on analysis of 10 web sources (0 credible), 20 Reddit discussions, and 0 tweets.",
+        "icon": "⚠️",
+        "color": "orange-red",
+        "why_this_verdict": "No credible sources found to verify this claim. For significant events, the absence of coverage strongly suggests the claim is false."
+      },
+      "temporal_status": "UNCLEAR",
+      "time_verification": "The claim is about a statement allegedly made by a political figure, Narendra Modi. Given today's date is November 29, 2025, any such statement would have been made before this date. The lack of any relevant search results suggests this statement was never made.",
+      "key_evidence": [
+        "No credible sources found to support the claim.",
+        "The search results are entirely irrelevant to the claim."
+      ],
+      "sources": [
+        "Times of India (November 2025)",
+        "NDTV (November 2025)",
+        "BBC (November 2025)"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Political Manipulation (70% confidence)",
+        "⚠️ Search results were not relevant to the claim"
+      ],
+      "web_sources_found": 10,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "LIKELY_FALSE",
+  "confidence": 0.5599999999999999,
+  "recommendations": [
+    "WAIT for verification before sharing",
+    "You'll receive updates when more information is available"
+  ],
+  "report_id": "f9979a3f14364d50",
+  "generated_at": "2025-11-29T03:31:07.154754"
+}

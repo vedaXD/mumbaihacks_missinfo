@@ -1,0 +1,70 @@
+{
+  "user_input": "did modi ban 1000rs note",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T04:19:59.394675",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献解读：含 …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (1 posts in r/IndiaTech): MIXED",
+      "verdict": "OUTDATED_INFO",
+      "confidence": 0.9,
+      "explanation": "The claim refers to the banning of 1000 rupee notes, which is related to the demonetization event that occurred in 2016. The provided search results confirm this event happened in the past. Presenting this as current news in November 2025 is misleading. The absence of any recent news about a similar ban suggests the claim is not current.\\n\\n🐦 Social Media Perspective: Reddit (1 posts in r/IndiaTech): MIXED\n\n💾 This claim has been saved for periodic re-verification. You'll be notified when new information becomes available.",
+      "misinformation_pattern": "Frequent Fraud",
+      "pattern_confidence": 0.9,
+      "context_card": {
+        "verdict_explanation": "This claim contains OUTDATED INFORMATION",
+        "confidence_level": "90% confidence",
+        "reasoning": "Based on temporal analysis and 10 current sources.",
+        "icon": "📅",
+        "color": "yellow",
+        "why_this_verdict": "This information was accurate in the past but is no longer current. The claim may be presenting old news as if it's recent."
+      },
+      "temporal_status": "OUTDATED",
+      "time_verification": "The provided articles discuss the demonetization of old 500 and 1000 rupee notes. This event occurred in 2016, making the information outdated as of November 29, 2025.",
+      "key_evidence": [
+        "The NDTV article discusses the last day to deposit old 500 and 1000 rupee notes, indicating a past event.",
+        "The Indian Express article refers to the demonetization decision, further confirming it as a past event."
+      ],
+      "sources": [
+        "NDTV (date not available, but context indicates past event)",
+        "The Indian Express (date not available, but context indicates past event)",
+        "india.com (date not available, but context indicates past event)",
+        "So City (date not available, but context indicates past event)"
+      ],
+      "warnings": [
+        "🚨 Matches common misinformation pattern: Frequent Fraud (90% confidence)",
+        "⚠️ This information is outdated. Old news presented as current."
+      ],
+      "web_sources_found": 10,
+      "credible_sources_found": 0,
+      "stored_in_db": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "OUTDATED_INFO",
+  "confidence": 0.9,
+  "recommendations": [],
+  "report_id": "11a0971d98b5813a",
+  "generated_at": "2025-11-29T04:20:25.089332"
+}

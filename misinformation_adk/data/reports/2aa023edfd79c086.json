@@ -1,0 +1,63 @@
+{
+  "user_input": "Analyze this image for deepfakes and verify content accuracy",
+  "file_path": "data\\uploads\\telegram_AgACAgUAAxkBAAMoaSotlEfjyvImx9rBXEsmoZ_-7v4AAhoLaxsh9VBVxb0X6sPGFZMBAAMCAAN4AAM2BA.jpg",
+  "stages": {
+    "content_intake": {
+      "content_type": "image",
+      "has_text": false,
+      "has_media": true,
+      "media_type": "image",
+      "timestamp": "2025-11-29T04:47:38.959742",
+      "fast_mode": true
+    },
+    "media_analysis": {
+      "is_deepfake": false,
+      "confidence": 0.911548376083374,
+      "extracted_text": "",
+      "authenticity_score": 0.911548376083374,
+      "media_type": "image",
+      "image_deepfake": {
+        "is_manipulated": false,
+        "is_deepfake": false,
+        "confidence": 0.911548376083374,
+        "authenticity_score": 0.911548376083374,
+        "explanation": "Image appears AUTHENTIC/REAL with 91.2% confidence. No significant manipulation detected.",
+        "technical_details": {
+          "model": "EfficientNet-B0 (Custom Trained)",
+          "real_probability": 0.911548376083374,
+          "fake_probability": 0.08845163136720657
+        },
+        "model_loaded": true
+      },
+      "ocr_confidence": 0.0,
+      "text_word_count": 0,
+      "has_significant_text": false,
+      "skip_gemini": true,
+      "skip_reason": "Insufficient text content (0 words, need 10+ for meaningful analysis)"
+    },
+    "fact_check": {
+      "verdict": "NO_TEXT_CONTENT",
+      "confidence": 1.0,
+      "explanation": "Insufficient text content (0 words, need 10+ for meaningful analysis)",
+      "skipped": true,
+      "deepfake_only_analysis": true
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "AUTHENTIC_NO_TEXT",
+  "confidence": 0.911548376083374,
+  "recommendations": [],
+  "report_id": "2aa023edfd79c086",
+  "generated_at": "2025-11-29T04:47:56.517323",
+  "media_type": "image",
+  "filename": "telegram_AgACAgUAAxkBAAMoaSotlEfjyvImx9rBXEsmoZ_-7v4AAhoLaxsh9VBVxb0X6sPGFZMBAAMCAAN4AAM2BA.jpg"
+}
