@@ -89,7 +89,6 @@ chrome_extension/.pem
 chrome_extension/node_modules/
 
 # Model files (if using local ML models)
-*.pkl
 *.h5
 *.pt
 *.pth
