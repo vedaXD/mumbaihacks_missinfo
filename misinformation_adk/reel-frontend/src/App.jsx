@@ -223,8 +223,8 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>🎬 AI News Reel Generator</h1>
-        <p>Automated news video generation powered by Google AI</p>
+        <h1>🎬 Vishwas Netra</h1>
+        <p>AI-powered video reels from verified news sources</p>
       </header>
 
       <nav className="tabs">
@@ -319,7 +319,7 @@ function App() {
             <div className="reels-gallery">
               {newsReels.length === 0 ? (
                 <div className="empty-state">
-                  <div className="empty-icon">📹</div>
+                  <div className="empty-icon">�</div>
                   <h3>No Reels Yet</h3>
                   <p>Generate news reels to start scrolling!</p>
                 </div>
@@ -374,15 +374,32 @@ function App() {
                               <button className="action-btn">📤</button>
                             </div>
                             <div className="action-btn-wrapper">
-                              <a href={reel.video_url} download className="action-btn">
+                              <button 
+                                className="action-btn"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  const link = document.createElement('a');
+                                  link.href = reel.video_url;
+                                  link.download = `reel_${index + 1}.mp4`;
+                                  link.click();
+                                }}
+                              >
                                 ⬇️
-                              </a>
+                              </button>
                             </div>
                             {reel.url && (
                               <div className="action-btn-wrapper">
-                                <a href={reel.url} target="_blank" rel="noopener noreferrer" className="action-btn">
+                                <button 
+                                  className="action-btn"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    window.open(reel.url, '_blank', 'noopener,noreferrer');
+                                  }}
+                                >
                                   🔗
-                                </a>
+                                </button>
                               </div>
                             )}
                           </div>

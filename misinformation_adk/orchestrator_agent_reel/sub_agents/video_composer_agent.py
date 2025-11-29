@@ -15,7 +15,7 @@ except ImportError:
     texttospeech = None
     TTS_AVAILABLE = False
 
-from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip
+from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, TextClip, CompositeVideoClip
 import numpy as np
 from PIL import Image
 import io
@@ -161,6 +161,23 @@ class VideoComposerAgent:
             # Concatenate all video clips
             logger.info("🔗 Concatenating video clips...")
             final_video = concatenate_videoclips(video_clips, method="compose")
+            
+            # Add "Vishwas Netra" watermark
+            logger.info("🏷️ Adding Vishwas Netra watermark...")
+            try:
+                watermark = TextClip(
+                    "Vishwas Netra",
+                    fontsize=32,
+                    color='white',
+                    font='Arial-Bold',
+                    stroke_color='black',
+                    stroke_width=2
+                ).set_position(('right', 'top')).set_duration(final_video.duration).margin(right=20, top=20, opacity=0)
+                
+                final_video = CompositeVideoClip([final_video, watermark])
+            except Exception as e:
+                logger.warning(f"⚠️ Could not add watermark (font may be missing): {e}")
+                # Continue without watermark if TextClip fails
             
             # Combine all audio clips
             logger.info("🔊 Composing audio track...")

@@ -164,6 +164,7 @@ main {
   -ms-overflow-style: none;
   scroll-behavior: smooth;
   overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .instagram-reels-container::-webkit-scrollbar {
@@ -185,6 +186,7 @@ main {
   background: #000;
   flex-shrink: 0;
   overflow: hidden;
+  isolation: isolate;
 }
 
 /* Scroll indicator */
@@ -385,6 +387,10 @@ main {
   text-decoration: none;
   color: white;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .action-btn:hover {
@@ -393,6 +399,10 @@ main {
 
 .action-btn:active {
   transform: scale(0.95);
+}
+
+.action-btn:focus {
+  outline: none;
 }
 
 .action-count {

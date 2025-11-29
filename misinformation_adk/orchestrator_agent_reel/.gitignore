@@ -16,6 +16,9 @@ test_*.png
 test_*.jpg
 test_*.mp4
 
+# Generated fallback images (auto-created)
+fallback_images/
+
 # Documentation (keep README.md only)
 IMPLEMENTATION_SUMMARY.md
 QUICK_START*.md

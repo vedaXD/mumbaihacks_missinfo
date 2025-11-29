@@ -8,6 +8,7 @@ const checkTextBtn = document.getElementById('checkText');
 const checkSelectionBtn = document.getElementById('checkSelection');
 const checkPageBtn = document.getElementById('checkPage');
 const checkYouTubeBtn = document.getElementById('checkYouTube');
+const openNewsReelsBtn = document.getElementById('openNewsReels');
 
 // DOM elements - Image tab
 const imageUpload = document.getElementById('imageUpload');
@@ -16,6 +17,9 @@ const imagePreview = document.getElementById('imagePreview');
 const imagePreviewImg = document.getElementById('imagePreviewImg');
 const imageInfo = document.getElementById('imageInfo');
 const checkImageBtn = document.getElementById('checkImage');
+const openNewsReelsImageBtn = document.getElementById('openNewsReelsImage');
+const captureScreenBtn = document.getElementById('captureScreenBtn');
+const uploadImageBtn = document.getElementById('uploadImageBtn');
 
 // DOM elements - Video tab
 const videoUpload = document.getElementById('videoUpload');
@@ -24,6 +28,7 @@ const videoPreview = document.getElementById('videoPreview');
 const videoPreviewVid = document.getElementById('videoPreviewVid');
 const videoInfo = document.getElementById('videoInfo');
 const checkVideoBtn = document.getElementById('checkVideo');
+const openNewsReelsVideoBtn = document.getElementById('openNewsReelsVideo');
 
 // DOM elements - Audio tab
 const audioUpload = document.getElementById('audioUpload');
@@ -32,6 +37,7 @@ const audioPreview = document.getElementById('audioPreview');
 const audioPreviewAud = document.getElementById('audioPreviewAud');
 const audioInfo = document.getElementById('audioInfo');
 const checkAudioBtn = document.getElementById('checkAudio');
+const openNewsReelsAudioBtn = document.getElementById('openNewsReelsAudio');
 
 // DOM elements - Common
 const statusDiv = document.getElementById('status');
@@ -95,6 +101,18 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 // File upload handlers
 let currentFile = null;
+
+// Screenshot/Upload toggle buttons
+if (captureScreenBtn) {
+    captureScreenBtn.addEventListener('click', captureScreenshot);
+}
+
+if (uploadImageBtn) {
+    uploadImageBtn.addEventListener('click', () => {
+        imageUpload.style.display = 'flex';
+        imageInput.click();
+    });
+}
 
 // Image upload
 imageUpload.addEventListener('click', () => imageInput.click());
@@ -183,6 +201,58 @@ function handleImageFile(file) {
     };
     reader.readAsDataURL(file);
 }
+
+// Screenshot capture function
+function captureScreenshot() {
+    showStatus('Click and drag to select area...', 'info');
+    
+    // Inject the screenshot selector into the active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (!tabs[0]) {
+            showStatus('No active tab found', 'error');
+            return;
+        }
+        
+        // Inject the selector script
+        chrome.scripting.executeScript({
+            target: { tabId: tabs[0].id },
+            files: ['screenshot-selector.js']
+        }).then(() => {
+            // Send message to start selection
+            chrome.tabs.sendMessage(tabs[0].id, { action: 'startScreenshotSelector' });
+            
+            // Close popup to allow selection
+            window.close();
+        }).catch(err => {
+            showStatus('Failed to capture: ' + err.message, 'error');
+        });
+    });
+}
+
+// Listen for screenshot captured message from background
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'screenshotCaptured') {
+        // Convert data URL to blob
+        fetch(request.dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                // Create a File object from the blob
+                const file = new File([blob], 'screenshot.png', { type: 'image/png' });
+                currentFile = file;
+                
+                // Display the screenshot
+                imagePreviewImg.src = request.dataUrl;
+                imageInfo.textContent = `screenshot.png (${(request.size / 1024).toFixed(1)} KB)`;
+                imagePreview.classList.add('show');
+                imageUpload.style.display = 'none';
+                
+                showStatus('Screenshot captured successfully!', 'success');
+            })
+            .catch(err => {
+                showStatus('Failed to process screenshot: ' + err.message, 'error');
+            });
+    }
+});
 
 function handleVideoFile(file) {
     if (!file.type.startsWith('video/')) {
@@ -748,3 +818,24 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// News Reels Generator button handlers
+function openNewsReels() {
+    chrome.tabs.create({ url: 'http://localhost:3000' });
+}
+
+if (openNewsReelsBtn) {
+    openNewsReelsBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsImageBtn) {
+    openNewsReelsImageBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsVideoBtn) {
+    openNewsReelsVideoBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsAudioBtn) {
+    openNewsReelsAudioBtn.addEventListener('click', openNewsReels);
+}
