@@ -1,0 +1,66 @@
+{
+  "user_input": "did virat kohli retire",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T05:56:35.071455",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "“You Just Know”: Virat Kohli Explains His Test Cricket Retirement",
+      "url": "https://thecricketlounge.com/virat-kohli-explains-test-cricket-retirement/",
+      "snippet": "On May 12, 2025, Indian cricket fans woke up to a seismic shift in the sport’s landscape: Virat Kohli, one of the most iconic figures in modern cricket, announced his retirement from Test …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (12 posts in r/IndiaCricket, ViratKohli, bankingexam): MIXED",
+      "verdict": "PARTIALLY_TRUE",
+      "confidence": 0.9,
+      "explanation": "The web search results clearly indicate that Virat Kohli retired from Test cricket in May 2025. The articles from NDTV Sports suggest that there are ongoing discussions about farewell gestures for prominent players like Virat Kohli and Rohit Sharma, implying they are still active in other formats of the game as of November 2025. Therefore, the claim is partially true as he retired from Test cricket, but it's not a complete retirement from all forms of cricket.\\n\\n🐦 Social Media Perspective: Reddit (12 posts in r/IndiaCricket, ViratKohli, bankingexam): MIXED\n\n✓ High confidence based on multiple authoritative sources.",
+      "misinformation_pattern": null,
+      "pattern_confidence": 0.0,
+      "context_card": {
+        "verdict_explanation": "This claim is PARTIALLY TRUE",
+        "confidence_level": "90% confidence",
+        "reasoning": "Based on analysis of 12 web sources (0 credible), 12 Reddit discussions, and 0 tweets.",
+        "icon": "⚠️",
+        "color": "orange",
+        "why_this_verdict": "Some aspects of this claim are accurate, but important context or details are missing or incorrect."
+      },
+      "temporal_status": "OUTDATED",
+      "time_verification": "The claim asks if Virat Kohli retired. Web search results from November 29, 2025, confirm that Virat Kohli retired from Test cricket in May 2025. The claim is partially true because he did retire from Test cricket, but it doesn't specify which format.",
+      "key_evidence": [
+        "Virat Kohli retired from Test cricket on May 12, 2025 (multiple sources).",
+        "NDTV Sports articles from November 2025 discuss farewell gestures for Virat Kohli and Rohit Sharma, suggesting they are still active in other formats."
+      ],
+      "sources": [
+        "NDTV Sports articles (November 2025)",
+        "Web search results from May 2025 confirming Test retirement."
+      ],
+      "warnings": [
+        "⚠️ This information is outdated. Old news presented as current."
+      ],
+      "web_sources_found": 12,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "PARTIALLY_TRUE",
+  "confidence": 0.9,
+  "recommendations": [],
+  "report_id": "7a70b39c4a740964",
+  "generated_at": "2025-11-29T05:56:53.144154"
+}
