@@ -1,0 +1,63 @@
+{
+  "user_input": "Analyze this image for deepfakes and verify content accuracy",
+  "file_path": "data\\uploads\\telegram_AgACAgUAAxkBAAMxaSo0aj6zk-5UtF_Db0T5a2NV7ZEAAh8Laxsh9VBVI8DHwXaWxqMBAAMCAAN5AAM2BA.jpg",
+  "stages": {
+    "content_intake": {
+      "content_type": "image",
+      "has_text": false,
+      "has_media": true,
+      "media_type": "image",
+      "timestamp": "2025-11-29T05:26:42.111713",
+      "fast_mode": true
+    },
+    "media_analysis": {
+      "is_deepfake": true,
+      "confidence": 0.6872313618659973,
+      "extracted_text": "Did Virat Kohli retire",
+      "authenticity_score": 0.3127686381340027,
+      "media_type": "image",
+      "image_deepfake": {
+        "is_manipulated": true,
+        "is_deepfake": true,
+        "confidence": 0.6872313618659973,
+        "authenticity_score": 0.3127686381340027,
+        "explanation": "Image detected as AI-GENERATED/FAKE with 68.7% confidence. The model identified artificial patterns consistent with deepfake or synthetic image generation.",
+        "technical_details": {
+          "model": "EfficientNet-B0 (Custom Trained)",
+          "real_probability": 0.3127686083316803,
+          "fake_probability": 0.6872313618659973
+        },
+        "model_loaded": true
+      },
+      "ocr_confidence": 0.0,
+      "text_word_count": 4,
+      "has_significant_text": false,
+      "skip_gemini": true,
+      "skip_reason": "Insufficient text content (4 words, need 10+ for meaningful analysis)"
+    },
+    "fact_check": {
+      "verdict": "NO_TEXT_CONTENT",
+      "confidence": 1.0,
+      "explanation": "Insufficient text content (4 words, need 10+ for meaningful analysis)",
+      "skipped": true,
+      "deepfake_only_analysis": true
+    },
+    "knowledge": {
+      "topic": "deepfake",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "DEEPFAKE",
+  "confidence": 0.6872313618659973,
+  "recommendations": [],
+  "report_id": "ea98a25099794f90",
+  "generated_at": "2025-11-29T05:26:53.577726",
+  "media_type": "image",
+  "filename": "telegram_AgACAgUAAxkBAAMxaSo0aj6zk-5UtF_Db0T5a2NV7ZEAAh8Laxsh9VBVI8DHwXaWxqMBAAMCAAN5AAM2BA.jpg"
+}

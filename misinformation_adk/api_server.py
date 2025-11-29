@@ -26,8 +26,9 @@ if os.getenv('HF_HOME'):
 if os.getenv('HF_HUB_CACHE'):
     os.environ['HF_HUB_CACHE'] = os.getenv('HF_HUB_CACHE')
 
-# Import orchestrator
-from orchestrator_agent_reel.orchestrator_tool import OrchestratorTool
+# Import orchestrators
+from orchestrator_agent.orchestrator_tool import OrchestratorTool  # Main fact-checking
+from orchestrator_agent_reel.orchestrator_tool import OrchestratorAgent as ReelOrchestrator  # Reel generation
 
 app = FastAPI(
     title="Misinformation Detection API",

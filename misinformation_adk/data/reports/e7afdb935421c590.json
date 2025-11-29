@@ -1,0 +1,67 @@
+{
+  "user_input": "did rohit sharma retire",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T05:57:23.165209",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "title": "怎么用通俗的语言解释断点回归？它与DID的区别是什么 - 知乎",
+      "url": "https://www.zhihu.com/question/39613256",
+      "snippet": "Stata倍分法：全国一刀切的DID Stata-DID：不同处理时点不同持久期的倍分法（flexpaneldid） 队列DID：以知识青年“上山下乡”为例-T401 DID功效计算中的序列相关问题-T407 多期DID文献 …",
+      "date": "2025-11-29",
+      "reddit_consensus": "MIXED",
+      "social_media_perspective": "Reddit (11 posts in r/IndiaCricket, viralpatrika, IndianCricket): MIXED",
+      "verdict": "FALSE",
+      "confidence": 0.8,
+      "explanation": "The Google News articles from NDTV Sports and Hindustan Times directly address the claim. They indicate that there have been discussions and speculation about the future of Rohit Sharma and Virat Kohli, but they have not retired as of November 29, 2025. The Reddit discussions also reflect this uncertainty and speculation. The absence of any credible news sources confirming his retirement strongly suggests the claim is false. A major event like the retirement of a prominent athlete would generate widespread coverage.\\n\\n🐦 Social Media Perspective: Reddit (11 posts in r/IndiaCricket, viralpatrika, IndianCricket): MIXED",
+      "misinformation_pattern": null,
+      "pattern_confidence": 0.0,
+      "context_card": {
+        "verdict_explanation": "This claim has been identified as FALSE",
+        "confidence_level": "80% confidence",
+        "reasoning": "Based on analysis of 10 web sources (0 credible), 11 Reddit discussions, and 0 tweets.",
+        "icon": "❌",
+        "color": "red",
+        "why_this_verdict": "Evidence from 0 credible sources contradicts this claim. This information is misleading or incorrect."
+      },
+      "temporal_status": "CURRENT",
+      "time_verification": "The search results are from November 29, 2025, and address the current status of Rohit Sharma's career.",
+      "key_evidence": [
+        "NDTV Sports articles from November 2025 deny that Rohit Sharma has retired.",
+        "Hindustan Times article from November 2025 discusses speculation about Rohit Sharma's future but does not confirm retirement."
+      ],
+      "sources": [
+        "NDTV Sports (November 2025)",
+        "Hindustan Times (November 2025)"
+      ],
+      "warnings": [],
+      "web_sources_found": 10,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "fact_checking",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "FALSE",
+  "confidence": 0.8,
+  "recommendations": [
+    "DO NOT SHARE this content",
+    "Inform others who may have shared it"
+  ],
+  "report_id": "e7afdb935421c590",
+  "generated_at": "2025-11-29T05:57:38.370427"
+}
