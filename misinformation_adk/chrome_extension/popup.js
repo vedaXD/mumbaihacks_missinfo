@@ -8,6 +8,7 @@ const checkTextBtn = document.getElementById('checkText');
 const checkSelectionBtn = document.getElementById('checkSelection');
 const checkPageBtn = document.getElementById('checkPage');
 const checkYouTubeBtn = document.getElementById('checkYouTube');
+const openNewsReelsBtn = document.getElementById('openNewsReels');
 
 // DOM elements - Image tab
 const imageUpload = document.getElementById('imageUpload');
@@ -16,6 +17,7 @@ const imagePreview = document.getElementById('imagePreview');
 const imagePreviewImg = document.getElementById('imagePreviewImg');
 const imageInfo = document.getElementById('imageInfo');
 const checkImageBtn = document.getElementById('checkImage');
+const openNewsReelsImageBtn = document.getElementById('openNewsReelsImage');
 
 // DOM elements - Video tab
 const videoUpload = document.getElementById('videoUpload');
@@ -24,6 +26,7 @@ const videoPreview = document.getElementById('videoPreview');
 const videoPreviewVid = document.getElementById('videoPreviewVid');
 const videoInfo = document.getElementById('videoInfo');
 const checkVideoBtn = document.getElementById('checkVideo');
+const openNewsReelsVideoBtn = document.getElementById('openNewsReelsVideo');
 
 // DOM elements - Audio tab
 const audioUpload = document.getElementById('audioUpload');
@@ -32,6 +35,7 @@ const audioPreview = document.getElementById('audioPreview');
 const audioPreviewAud = document.getElementById('audioPreviewAud');
 const audioInfo = document.getElementById('audioInfo');
 const checkAudioBtn = document.getElementById('checkAudio');
+const openNewsReelsAudioBtn = document.getElementById('openNewsReelsAudio');
 
 // DOM elements - Common
 const statusDiv = document.getElementById('status');
@@ -731,3 +735,24 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// News Reels Generator button handlers
+function openNewsReels() {
+    chrome.tabs.create({ url: 'http://localhost:3000' });
+}
+
+if (openNewsReelsBtn) {
+    openNewsReelsBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsImageBtn) {
+    openNewsReelsImageBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsVideoBtn) {
+    openNewsReelsVideoBtn.addEventListener('click', openNewsReels);
+}
+
+if (openNewsReelsAudioBtn) {
+    openNewsReelsAudioBtn.addEventListener('click', openNewsReels);
+}
