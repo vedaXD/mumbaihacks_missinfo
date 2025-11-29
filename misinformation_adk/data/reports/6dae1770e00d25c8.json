@@ -1,0 +1,70 @@
+{
+  "user_input": "did virat kohli retire?",
+  "file_path": null,
+  "stages": {
+    "content_intake": {
+      "content_type": "text",
+      "has_text": true,
+      "has_media": false,
+      "media_type": null,
+      "timestamp": "2025-11-29T07:41:43.899088",
+      "fast_mode": true
+    },
+    "media_analysis": null,
+    "fact_check": {
+      "verdict": "LIKELY_FALSE",
+      "confidence": 0.7,
+      "temporal_status": "CURRENT",
+      "sources_checked": [
+        "gemini_ai_with_web_grounding",
+        "web_search",
+        "reddit_discussions",
+        "twitter_scraper"
+      ],
+      "explanation": "The search results are relevant to the topic of Virat Kohli, but they do not confirm his retirement. The NDTV Sports articles discuss requests for a Sachin Tendulkar-like farewell and a gesture by Kohli in Adelaide, but neither explicitly states that he has retired. The Reddit discussions show mixed opinions, suggesting there is no clear consensus or confirmation. Given the significance of Virat Kohli and the lack of direct confirmation from credible sources, it is likely that he has not retired as of November 29, 2025. A major event like this would have widespread coverage.\n\n💡 Analysis: The absence of credible sources for such a significant claim strongly suggests it is false. Real events of this magnitude generate immediate, widespread, and verifiable coverage from multiple news outlets.\\n\\n🐦 Social Media Perspective: Reddit (12 posts in r/IndiaCricket, ViratKohli, bankingexam): MIXED",
+      "stored_in_db": false,
+      "reddit_consensus": "MIXED",
+      "twitter_consensus": null,
+      "social_media_perspective": "Reddit (12 posts in r/IndiaCricket, ViratKohli, bankingexam): MIXED",
+      "news_articles_found": 15,
+      "misinformation_pattern": null,
+      "pattern_confidence": 0.0,
+      "context_card": {
+        "verdict_explanation": "This claim is LIKELY FALSE",
+        "confidence_level": "70% confidence",
+        "reasoning": "Based on analysis of 0 web sources (0 credible), 12 Reddit discussions, and 0 tweets.",
+        "icon": "⚠️",
+        "color": "orange-red",
+        "why_this_verdict": "No credible sources found to verify this claim. For significant events, the absence of coverage strongly suggests the claim is false. 💡 Major events generate widespread coverage. The complete absence of credible sources strongly indicates this is fabricated misinformation."
+      },
+      "time_verification": "The claim is being assessed as of November 29, 2025. If Virat Kohli, a major sports figure, had retired, it would be widely reported.",
+      "key_evidence": [
+        "The NDTV Sports articles do not state that Virat Kohli has retired (November 2025).",
+        "Reddit discussions show mixed opinions, indicating no confirmed retirement (November 2025)."
+      ],
+      "sources": [
+        "NDTV Sports (November 2025)"
+      ],
+      "warnings": [],
+      "web_sources_found": 0,
+      "credible_sources_found": 0
+    },
+    "knowledge": {
+      "topic": "general",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "LIKELY_FALSE",
+  "confidence": 0.7,
+  "recommendations": [],
+  "report_id": "6dae1770e00d25c8",
+  "generated_at": "2025-11-29T07:42:05.198251",
+  "original_content": "did virat kohli retire?",
+  "youtube_url": null
+}

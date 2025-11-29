@@ -1,0 +1,60 @@
+{
+  "user_input": "Analyze this audio for AI voice cloning and verify content accuracy",
+  "file_path": "data\\uploads\\telegram_AwACAgUAAxkBAAM9aSpCkmxKc9stPoa-pMgpKCSf9AYAAgMWAAIh9VBVk6x3NI2Ep3k2BA.ogg",
+  "stages": {
+    "content_intake": {
+      "content_type": "audio",
+      "has_text": false,
+      "has_media": true,
+      "media_type": "audio",
+      "timestamp": "2025-11-29T06:17:16.510755",
+      "fast_mode": true
+    },
+    "media_analysis": {
+      "is_deepfake": true,
+      "confidence": 0.6466666666666666,
+      "extracted_text": "hello my name is somaram Patil please",
+      "authenticity_score": 0.3533333333333334,
+      "media_type": "audio",
+      "audio_deepfake": {
+        "is_deepfake": true,
+        "confidence": 0.6466666666666666,
+        "authenticity_score": 0.3533333333333334,
+        "transcribed_text": "hello my name is somaram Patil please",
+        "duration_seconds": 4.7535,
+        "sample_rate": 16000,
+        "analysis": "Potential AI-generated/deepfake audio",
+        "model_loaded": true
+      },
+      "transcription_confidence": 0.6466666666666666,
+      "text_word_count": 7,
+      "has_significant_text": false,
+      "skip_gemini": true,
+      "skip_reason": "Insufficient transcribed content (7 words, need 10+ for analysis)"
+    },
+    "fact_check": {
+      "verdict": "NO_TEXT_CONTENT",
+      "confidence": 1.0,
+      "explanation": "Insufficient transcribed content (7 words, need 10+ for analysis)",
+      "skipped": true,
+      "deepfake_only_analysis": true
+    },
+    "knowledge": {
+      "topic": "deepfake",
+      "tips": [
+        "Always verify information from multiple credible sources",
+        "Check the date and context of claims",
+        "Be skeptical of sensational or emotionally charged content",
+        "Use fact-checking websites for verification"
+      ],
+      "tailored_advice": "❓ This claim cannot be verified with confidence. We're monitoring for updates."
+    }
+  },
+  "final_verdict": "DEEPFAKE",
+  "confidence": 0.6466666666666666,
+  "recommendations": [],
+  "report_id": "c8bb345cab100f36",
+  "generated_at": "2025-11-29T06:17:35.901025",
+  "media_type": "audio",
+  "filename": "telegram_AwACAgUAAxkBAAM9aSpCkmxKc9stPoa-pMgpKCSf9AYAAgMWAAIh9VBVk6x3NI2Ep3k2BA.ogg"
+}

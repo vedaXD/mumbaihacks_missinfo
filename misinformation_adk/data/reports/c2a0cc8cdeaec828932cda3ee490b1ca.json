@@ -1,0 +1,21 @@
+{
+  "media_type": "audio",
+  "filename": "alloy_0.wav",
+  "deepfake_analysis": {
+    "is_deepfake": true,
+    "confidence": 0.6933333333333334,
+    "explanation": "Analysis not available",
+    "technical_details": {}
+  },
+  "content_analysis": {
+    "verdict": "NO_TEXT_CONTENT",
+    "confidence": 1.0,
+    "summary": "",
+    "explanation": "Insufficient transcribed content (4 words, need 10+ for analysis)",
+    "sources": []
+  },
+  "overall_verdict": "⚠️ DEEPFAKE DETECTED: Media is manipulated/fabricated, but content accuracy is uncertain.",
+  "timestamp": "2025-11-29T06:16:38.759423",
+  "report_id": "c2a0cc8cdeaec828932cda3ee490b1ca",
+  "generated_at": "2025-11-29T06:16:38.759471"
+}
